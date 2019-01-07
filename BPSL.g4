@@ -80,7 +80,7 @@ L_STRING: QUOTE [\u0000-\u00FF]* QUOTE;
 
 IDENTIFIER: (UPPER | LOWER) (UPPER | LOWER | NUMERIC)*;
 
-bpsl: block;
+bpsl: block*;
 
 block: structure | function | classFucker | constantDefinition;
 
