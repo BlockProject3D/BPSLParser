@@ -126,7 +126,7 @@ ifStatement: IF PAR_OPEN expr PAR_CLOSE statement;
 whileStatement: WHILE PAR_OPEN expr PAR_CLOSE statement;
 forStatement: FOR PAR_OPEN expr PAR_CLOSE statement;
 compoundStatement: CBRACE_OPEN statement* CBRACE_CLOSE;
-returnStatement: RETURN (PAR_OPEN expr PAR_CLOSE | expr)?;
+returnStatement: RETURN (PAR_OPEN expr PAR_CLOSE | expr)? SEMICOLON;
 
 variableDeclaration: IDENTIFIER IDENTIFIER SEMICOLON
     | IDENTIFIER IDENTIFIER EQUAL expr SEMICOLON;
