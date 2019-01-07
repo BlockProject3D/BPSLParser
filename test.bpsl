@@ -1,0 +1,12 @@
+int main()
+{
+	float f = 0.5f;
+	double d = 0.5;
+	int i = 0;
+	Vec2 v = Vec2(0, 0);
+	Vec2 v1 = Vec2(1, 1);
+	
+	if (f > 0.001f)
+		print("FUCKERS");
+	float f1 = v.Dot(v1);
+}
