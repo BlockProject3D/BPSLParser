@@ -31,8 +31,9 @@ grammar BPSL;
 WS: [ \n\t\r]+ -> skip;
 
 STRUCT: 'struct';
-CLASS1: 'class';
+CLASS: 'class';
 CONST: 'const';
+RETURN: 'return';
 IF: 'if';
 FOR: 'for';
 WHILE: 'while';
@@ -85,7 +86,7 @@ block: structure | function | classFucker | constantDefinition;
 
 structure: STRUCT qualifier IDENTIFIER CBRACE_OPEN attribute* CBRACE_CLOSE;
 
-classFucker: CLASS1 IDENTIFIER CBRACE_OPEN (attribute | function)* CBRACE_CLOSE;
+classFucker: CLASS IDENTIFIER CBRACE_OPEN (attribute | function)* CBRACE_CLOSE;
 
 constantDefinition: CONST IDENTIFIER IDENTIFIER EQUAL constantExpr SEMICOLON;
 
@@ -118,12 +119,14 @@ statement: ifStatement
     | forStatement
     | compoundStatement
     | variableDeclaration
-    | expr SEMICOLON;
+    | expr SEMICOLON
+    | returnStatement;
 
 ifStatement: IF PAR_OPEN expr PAR_CLOSE statement;
 whileStatement: WHILE PAR_OPEN expr PAR_CLOSE statement;
 forStatement: FOR PAR_OPEN expr PAR_CLOSE statement;
 compoundStatement: CBRACE_OPEN statement* CBRACE_CLOSE;
+returnStatement: RETURN (PAR_OPEN expr PAR_CLOSE | expr)?;
 
 variableDeclaration: IDENTIFIER IDENTIFIER SEMICOLON
     | IDENTIFIER IDENTIFIER EQUAL expr SEMICOLON;
@@ -143,26 +146,26 @@ expr: L_INT
     | expr op=MOD expr
     | expr op=PLUS expr
     | expr op=MINUS expr
-    | expr MUL EQUAL expr
-    | expr DIV EQUAL expr
-    | expr MOD EQUAL expr
-    | expr PLUS EQUAL expr
-    | expr MINUS EQUAL expr
+    | expr op=MUL op1=EQUAL expr
+    | expr op=DIV op1=EQUAL expr
+    | expr op=MOD op1=EQUAL expr
+    | expr op=PLUS op1=EQUAL expr
+    | expr op=MINUS op1=EQUAL expr
     | expr op=GREATER expr
     | expr op=LESS expr
-    | expr GREATER EQUAL expr
-    | expr LESS EQUAL expr
-    | expr EQUAL EQUAL expr
-    | expr NOT EQUAL expr
-    | expr OR OR expr
-    | expr AND AND expr
-    | expr GREATER GREATER expr
-    | expr LESS LESS expr
-    | expr AND expr
-    | expr OR expr
-    | MINUS MINUS expr
-    | PLUS PLUS expr
-    | MINUS expr
-    | NOT expr;
+    | expr op=GREATER op1=EQUAL expr
+    | expr op=LESS op1=EQUAL expr
+    | expr op=EQUAL op1=EQUAL expr
+    | expr op=NOT op1=EQUAL expr
+    | expr op=OR op1=OR expr
+    | expr op=AND op1=AND expr
+    | expr op=GREATER op1=GREATER expr
+    | expr op=LESS op1=LESS expr
+    | expr op=AND expr
+    | expr op=OR expr
+    | op=MINUS op1=MINUS expr
+    | op=PLUS op1=PLUS expr
+    | op=MINUS expr
+    | op=NOT expr;
 
 functionCall: IDENTIFIER PAR_OPEN (expr COMA?)* PAR_CLOSE;
