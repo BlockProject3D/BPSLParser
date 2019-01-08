@@ -1,6 +1,11 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '4.0.3'
+}
+
 group 'blockproject.bpsl'
 version 'PREVIEW_1'
 
+apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'java'
 apply plugin: 'antlr'
 
@@ -36,11 +41,29 @@ generateGrammarSource {
             from "${buildDir}/generated-src/antlr/main"
             into "generated-src/main/java"
         }
+        file("${buildDir}/generated-src/antlr/main").deleteDir()
     }
 
     arguments += ["-visitor", "-long-messages"]
 }
 
+sourceSets.main.java.srcDirs += "generated-src/main/java"
+
 clean.doLast {
     file('generated-src').deleteDir()
+    file('bin').deleteDir()
 }
+
+jar.enabled = false
+
+shadowJar {
+    manifest {
+        attributes 'Main-Class': 'blockproject.bpsl.Main'
+    }
+    configurations = [project.configurations.compile, project.configurations.runtime]
+    baseName = 'bpslcl'
+    version = version
+    archiveName = "${baseName}-${version}.${extension}"
+}
+
+assemble.dependsOn shadowJar

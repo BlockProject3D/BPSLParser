@@ -73,6 +73,21 @@ GREATER: '>';
 PLUS: '+';
 MINUS: '-';
 EQUAL: '=';
+MUL_EQUAL: MUL EQUAL;
+DIV_EQUAL: DIV EQUAL;
+MOD_EQUAL: MOD EQUAL;
+PLUS_EQUAL: PLUS EQUAL;
+MINUS_EQUAL: MINUS EQUAL;
+GREATER_EQUAL: GREATER EQUAL;
+LESS_EQUAL: LESS EQUAL;
+EQUAL_EQUAL: EQUAL EQUAL;
+NOT_EQUAL: NOT EQUAL;
+AND_AND: AND AND;
+OR_OR: OR OR;
+SHIFT_LEFT: LESS LESS;
+SHIFT_RIGHT: GREATER GREATER;
+INCREMENT: PLUS PLUS;
+DECREMENT: MINUS MINUS;
 
 //Litterals
 fragment NUMERIC: [0-9];
@@ -89,35 +104,33 @@ bpsl: block*;
 
 block: structure | function | classFucker | constantDefinition;
 
-structure: STRUCT qualifier IDENTIFIER CBRACE_OPEN attribute* CBRACE_CLOSE;
+structure: STRUCT qualifier name=IDENTIFIER CBRACE_OPEN attribute* CBRACE_CLOSE;
 
-classFucker: CLASS IDENTIFIER CBRACE_OPEN (attribute | function)* CBRACE_CLOSE;
+classFucker: CLASS name=IDENTIFIER CBRACE_OPEN (attribute | function)* CBRACE_CLOSE;
 
-constantDefinition: CONST IDENTIFIER IDENTIFIER EQUAL constantExpr SEMICOLON;
+constantDefinition: CONST type=IDENTIFIER name=IDENTIFIER EQUAL constantExpr SEMICOLON;
 
-function: IDENTIFIER IDENTIFIER PAR_OPEN (functionParameter COMA)* PAR_CLOSE compoundStatement;
+function: type=IDENTIFIER name=IDENTIFIER PAR_OPEN (functionParameter COMA)* PAR_CLOSE compoundStatement;
 
-attribute: IDENTIFIER IDENTIFIER SEMICOLON;
+attribute: type=IDENTIFIER name=IDENTIFIER SEMICOLON
+    | type=IDENTIFIER name=IDENTIFIER SBRACE_OPEN constantExpr SBRACE_CLOSE SEMICOLON;
 
-functionParameter: IDENTIFIER IDENTIFIER
-    | IDENTIFIER IDENTIFIER EQUAL (L_INT | L_FLOAT | L_DOUBLE | L_STRING);
+functionParameter: type=IDENTIFIER name=IDENTIFIER
+    | type=IDENTIFIER name=IDENTIFIER EQUAL (L_INT | L_FLOAT | L_DOUBLE | L_STRING);
 
 qualifier: QUALIFIER_CBUF | QUALIFIER_VL;
 
-constantExpr: L_INT
-    | L_FLOAT
-    | L_DOUBLE
-    | IDENTIFIER
+constantExpr: value=L_INT
+    | value=L_FLOAT
+    | value=L_DOUBLE
+    | value=IDENTIFIER
     | PAR_OPEN constantExpr PAR_CLOSE
     | constantFunctionCall
-    | constantExpr op=MUL constantExpr
-    | constantExpr op=DIV constantExpr
-    | constantExpr op=MOD constantExpr
-    | constantExpr op=PLUS constantExpr
-    | constantExpr op=MINUS constantExpr
+    | constantExpr op=(MUL | DIV | MOD) constantExpr
+    | constantExpr op=(PLUS | MINUS) constantExpr
     | op=MINUS constantExpr;
 
-constantFunctionCall: IDENTIFIER PAR_OPEN (constantExpr COMA?)* PAR_CLOSE;
+constantFunctionCall: name=IDENTIFIER PAR_OPEN (constantExpr COMA?)* PAR_CLOSE;
 
 statement: ifStatement
     | whileStatement
@@ -133,8 +146,9 @@ forStatement: FOR PAR_OPEN expr PAR_CLOSE statement;
 compoundStatement: CBRACE_OPEN statement* CBRACE_CLOSE;
 returnStatement: RETURN (PAR_OPEN expr PAR_CLOSE | expr)? SEMICOLON;
 
-variableDeclaration: IDENTIFIER IDENTIFIER SEMICOLON
-    | IDENTIFIER IDENTIFIER EQUAL expr SEMICOLON;
+variableDeclaration: type=IDENTIFIER name=IDENTIFIER SEMICOLON
+    | type=IDENTIFIER name=IDENTIFIER EQUAL expr SEMICOLON
+    | type=IDENTIFIER name=IDENTIFIER SBRACE_OPEN constantExpr SBRACE_CLOSE SEMICOLON;
 
 expr: L_INT
     | L_FLOAT
@@ -146,31 +160,16 @@ expr: L_INT
     | expr op=DOT IDENTIFIER
     | expr op=DOT functionCall
     | functionCall
-    | expr op=MUL expr
-    | expr op=DIV expr
-    | expr op=MOD expr
-    | expr op=PLUS expr
-    | expr op=MINUS expr
-    | expr op=MUL op1=EQUAL expr
-    | expr op=DIV op1=EQUAL expr
-    | expr op=MOD op1=EQUAL expr
-    | expr op=PLUS op1=EQUAL expr
-    | expr op=MINUS op1=EQUAL expr
-    | expr op=GREATER expr
-    | expr op=LESS expr
-    | expr op=GREATER op1=EQUAL expr
-    | expr op=LESS op1=EQUAL expr
-    | expr op=EQUAL op1=EQUAL expr
-    | expr op=NOT op1=EQUAL expr
-    | expr op=OR op1=OR expr
-    | expr op=AND op1=AND expr
-    | expr op=GREATER op1=GREATER expr
-    | expr op=LESS op1=LESS expr
-    | expr op=AND expr
-    | expr op=OR expr
-    | op=MINUS op1=MINUS expr
-    | op=PLUS op1=PLUS expr
+    | expr op=(MUL | DIV | MOD) expr
+    | expr op=(PLUS | MINUS) expr
+    | expr op=(MUL_EQUAL | DIV_EQUAL | MOD_EQUAL) expr
+    | expr op=(PLUS_EQUAL | MINUS_EQUAL) expr
+    | expr op=(LESS_EQUAL | GREATER_EQUAL | GREATER | LESS) expr
+    | expr op=(EQUAL_EQUAL | NOT_EQUAL) expr
+    | expr op=(OR_OR | AND_AND) expr
+    | expr op=(SHIFT_LEFT | SHIFT_RIGHT | AND | OR) expr
+    | op=(DECREMENT | INCREMENT) expr
     | op=MINUS expr
     | op=NOT expr;
 
-functionCall: IDENTIFIER PAR_OPEN (expr COMA?)* PAR_CLOSE;
+functionCall: name=IDENTIFIER PAR_OPEN (expr COMA?)* PAR_CLOSE;
