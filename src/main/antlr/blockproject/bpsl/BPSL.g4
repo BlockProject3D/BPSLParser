@@ -28,6 +28,11 @@
 
 grammar BPSL;
 
+@header
+{
+    package blockproject.bpsl;
+}
+
 WS: [ \n\t\r]+ -> skip;
 
 STRUCT: 'struct';
