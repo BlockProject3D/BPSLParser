@@ -10,6 +10,6 @@ public class FunctionCall extends Expr
 
     public FunctionCall()
     {
-        super(blockproject.bpsl.ast.expr.EType.FUNCTION_CALL);
+        super(EType.FUNCTION_CALL);
     }
 }

@@ -6,6 +6,6 @@ public class PrimaryExpr extends Expr
 
     public PrimaryExpr()
     {
-        super(blockproject.bpsl.ast.expr.EType.PRIMARY);
+        super(EType.PRIMARY);
     }
 }

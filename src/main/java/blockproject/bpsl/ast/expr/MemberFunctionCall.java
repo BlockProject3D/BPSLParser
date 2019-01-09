@@ -11,6 +11,6 @@ public class MemberFunctionCall extends Expr
 
     public MemberFunctionCall()
     {
-        super(blockproject.bpsl.ast.expr.EType.MEMBER_FUNCTION_CALL);
+        super(EType.MEMBER_FUNCTION_CALL);
     }
 }

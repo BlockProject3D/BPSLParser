@@ -6,6 +6,6 @@ public class DoubleLitteral extends Expr
 
     public DoubleLitteral()
     {
-        super(blockproject.bpsl.ast.expr.EType.DOUBLE_LITTERAL);
+        super(EType.DOUBLE_LITTERAL);
     }
 }

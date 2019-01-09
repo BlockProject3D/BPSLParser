@@ -6,6 +6,6 @@ public class FloatLitteral extends Expr
 
     public FloatLitteral()
     {
-        super(blockproject.bpsl.ast.expr.EType.FLOAT_LITTERAL);
+        super(EType.FLOAT_LITTERAL);
     }
 }

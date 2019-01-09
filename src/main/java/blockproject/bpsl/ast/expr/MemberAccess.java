@@ -7,6 +7,6 @@ public class MemberAccess extends Expr
 
     public MemberAccess()
     {
-        super(blockproject.bpsl.ast.expr.EType.MEMBER_ACCESS);
+        super(EType.MEMBER_ACCESS);
     }
 }

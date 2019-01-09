@@ -6,6 +6,6 @@ public class Identifier extends Expr
 
     public Identifier()
     {
-        super(blockproject.bpsl.ast.expr.EType.IDENTIFIER);
+        super(EType.IDENTIFIER);
     }
 }

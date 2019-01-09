@@ -15,6 +15,6 @@ public class UnaryExpr extends Expr
 
     public UnaryExpr()
     {
-        super(blockproject.bpsl.ast.expr.EType.UNARY_OPERATION);
+        super(Expr.EType.UNARY_OPERATION);
     }
 }

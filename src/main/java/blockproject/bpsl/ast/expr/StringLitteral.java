@@ -6,6 +6,6 @@ public class StringLitteral extends Expr
 
     public StringLitteral()
     {
-        super(blockproject.bpsl.ast.expr.EType.STRING_LITTERAL);
+        super(EType.STRING_LITTERAL);
     }
 }

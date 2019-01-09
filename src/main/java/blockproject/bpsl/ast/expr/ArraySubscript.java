@@ -7,6 +7,6 @@ public class ArraySubscript extends Expr
 
     public ArraySubscript()
     {
-        super(blockproject.bpsl.ast.expr.EType.ARRAY_SUBSCRIPT);
+        super(EType.ARRAY_SUBSCRIPT);
     }
 }
