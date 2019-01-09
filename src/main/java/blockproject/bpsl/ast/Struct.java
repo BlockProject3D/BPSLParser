@@ -8,7 +8,8 @@ public class Struct
     public enum EQualifier
     {
         CONSTBUF,
-        VLAYOUT
+        VLAYOUT,
+        NONE
     }
     
     public String name;

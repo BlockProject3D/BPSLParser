@@ -142,7 +142,7 @@ statement: ifStatement
 
 ifStatement: IF PAR_OPEN expr PAR_CLOSE statement;
 whileStatement: WHILE PAR_OPEN expr PAR_CLOSE statement;
-forStatement: FOR PAR_OPEN expr PAR_CLOSE statement;
+forStatement: FOR PAR_OPEN expr SEMICOLON expr SEMICOLON expr PAR_CLOSE statement;
 compoundStatement: CBRACE_OPEN statement* CBRACE_CLOSE;
 returnStatement: RETURN (PAR_OPEN expr PAR_CLOSE | expr)? SEMICOLON;
 
@@ -168,6 +168,7 @@ expr: L_INT
     | expr op=(EQUAL_EQUAL | NOT_EQUAL) expr
     | expr op=(OR_OR | AND_AND) expr
     | expr op=(SHIFT_LEFT | SHIFT_RIGHT | AND | OR) expr
+    | expr op=EQUAL expr
     | op=(DECREMENT | INCREMENT) expr
     | op=MINUS expr
     | op=NOT expr;

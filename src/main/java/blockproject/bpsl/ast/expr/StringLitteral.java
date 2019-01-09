@@ -4,8 +4,9 @@ public class StringLitteral extends Expr
 {
     public String value;
 
-    public StringLitteral()
+    public StringLitteral(String val)
     {
         super(EType.STRING_LITTERAL);
+        value = val;
     }
 }

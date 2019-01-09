@@ -3,5 +3,8 @@ const double d = 40 + 10 - (2*40) + (100/40) + 0.2;
 
 int main()
 {
+	int i = 0;
+
+	i += 0 * 1 + 2 * 4 - 8 / 1 * 1 + abc;
 	return (0);
 }

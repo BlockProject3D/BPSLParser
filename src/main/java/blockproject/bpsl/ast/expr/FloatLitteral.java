@@ -4,8 +4,9 @@ public class FloatLitteral extends Expr
 {
     public float value;
 
-    public FloatLitteral()
+    public FloatLitteral(float val)
     {
         super(EType.FLOAT_LITTERAL);
+        value = val;
     }
 }

@@ -4,8 +4,9 @@ public class Identifier extends Expr
 {
     public String id;
 
-    public Identifier()
+    public Identifier(String idn)
     {
         super(EType.IDENTIFIER);
+        id = idn;
     }
 }

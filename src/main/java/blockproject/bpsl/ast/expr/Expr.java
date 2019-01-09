@@ -11,6 +11,7 @@ public class Expr
         MEMBER_ACCESS,
         MEMBER_FUNCTION_CALL,
         PRIMARY,
+        INTEGER_LITTERAL,
         FLOAT_LITTERAL,
         DOUBLE_LITTERAL,
         IDENTIFIER,

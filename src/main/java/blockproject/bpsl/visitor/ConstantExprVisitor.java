@@ -1,8 +1,9 @@
-package blockproject.bpsl;
+package blockproject.bpsl.visitor;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import blockproject.bpsl.BPSLBaseVisitor;
+import blockproject.bpsl.BPSLLexer;
+import blockproject.bpsl.BPSLParser;
+import blockproject.bpsl.Scope;
 import blockproject.bpsl.ast.ConstantExpr;
 
 public class ConstantExprVisitor extends BPSLBaseVisitor<ConstantExpr>
@@ -110,9 +111,7 @@ public class ConstantExprVisitor extends BPSLBaseVisitor<ConstantExpr>
         return (resolveDouble(ctx.constantExpr(0)));
     }
 
-    /**
-     * @Override
-     */
+    @Override
     public ConstantExpr visitConstantDefinition(BPSLParser.ConstantDefinitionContext ctx)
     {
         ConstantExpr expr = new ConstantExpr();

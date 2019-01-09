@@ -2,7 +2,7 @@ package blockproject.bpsl.ast.expr;
 
 public class PrimaryExpr extends Expr
 {
-    private Expr expr;
+    public Expr expr;
 
     public PrimaryExpr()
     {

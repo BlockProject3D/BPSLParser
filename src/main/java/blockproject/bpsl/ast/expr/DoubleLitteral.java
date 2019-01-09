@@ -4,8 +4,9 @@ public class DoubleLitteral extends Expr
 {
     public double value;
 
-    public DoubleLitteral()
+    public DoubleLitteral(double val)
     {
         super(EType.DOUBLE_LITTERAL);
+        value = val;
     }
 }

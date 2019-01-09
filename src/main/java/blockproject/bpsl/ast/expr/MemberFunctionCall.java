@@ -7,7 +7,7 @@ public class MemberFunctionCall extends Expr
 {
     public Expr data;
     public String name;
-    public List<Expr> parametters = new ArrayList<>();
+    public List<Expr> parameters = new ArrayList<>();
 
     public MemberFunctionCall()
     {
