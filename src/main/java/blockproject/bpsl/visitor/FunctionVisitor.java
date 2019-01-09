@@ -3,11 +3,10 @@ package blockproject.bpsl.visitor;
 import blockproject.bpsl.BPSLBaseVisitor;
 import blockproject.bpsl.BPSLParser;
 import blockproject.bpsl.Scope;
-import blockproject.bpsl.ast.Class;
 import blockproject.bpsl.ast.Function;
 import blockproject.bpsl.ast.TypeName;
 
-public class FunctionVisitor extends BPSLBaseVisitor<Class>
+public class FunctionVisitor extends BPSLBaseVisitor<Function>
 {
     private Scope scope;
 
@@ -16,9 +15,11 @@ public class FunctionVisitor extends BPSLBaseVisitor<Class>
         scope = sc;
     }
 
-    public static Function parseFunction(BPSLParser.FunctionContext ctx)
+    public static Function parseFunction(BPSLParser.FunctionContext ctx, Scope scope)
     {
+        Scope sc = new Scope(scope);
         Function func = new Function();
+
         func.typeName.name = ctx.name.getText();
         func.typeName.type = ctx.type.getText();
         for (int i = 0 ; i < ctx.functionParameter().size() ; ++i)
@@ -28,24 +29,17 @@ public class FunctionVisitor extends BPSLBaseVisitor<Class>
             tn.type = ctx.functionParameter(i).type.getText();
             func.parameters.add(tn);
         }
+        for (int i = 0 ; i < ctx.compoundStatement().statement().size() ; ++i)
+            func.statements.add(StatementParser.parseStatement(ctx.compoundStatement().statement(i), sc));
         return (func);
     }
 
     @Override
-    public Class visitClassFucker(BPSLParser.ClassFuckerContext ctx)
+    public Function visitFunction(BPSLParser.FunctionContext ctx)
     {
-        Class st = new Class();
-
-        st.name = ctx.name.getText();
-        for (int i = 0 ; i < ctx.attribute().size() ; ++i)
-        {
-            TypeName tn = new TypeName();
-            tn.name = ctx.attribute(i).name.getText();
-            tn.type = ctx.attribute(i).type.getText();
-            st.attributes.add(tn);
-        }
-
-        scope.classes.put(st.name, st);
-        return (st);
+        Function fc = parseFunction(ctx, scope);
+        
+        scope.functions.put(fc.typeName.name, fc);
+        return (fc);
     }
 }

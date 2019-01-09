@@ -2,6 +2,7 @@ package blockproject.bpsl.visitor;
 
 import blockproject.bpsl.BPSLLexer;
 import blockproject.bpsl.BPSLParser;
+import blockproject.bpsl.Scope;
 import blockproject.bpsl.ast.expr.ArraySubscript;
 import blockproject.bpsl.ast.expr.BinaryExpr;
 import blockproject.bpsl.ast.expr.DoubleLitteral;
@@ -18,54 +19,54 @@ import blockproject.bpsl.ast.expr.UnaryExpr;
 
 public class ExpressionParser
 {
-    private static ArraySubscript parseSubscript(BPSLParser.ExprContext ctx)
+    private static ArraySubscript parseSubscript(BPSLParser.ExprContext ctx, Scope scope)
     {
         ArraySubscript sub = new ArraySubscript();
 
-        sub.array = parseExpr(ctx.expr(0));
-        sub.index = parseExpr(ctx.expr(1));
+        sub.array = parseExpr(ctx.expr(0), scope);
+        sub.index = parseExpr(ctx.expr(1), scope);
         return (sub);
     }
 
-    private static MemberAccess parseMemberAccess(BPSLParser.ExprContext ctx)
+    private static MemberAccess parseMemberAccess(BPSLParser.ExprContext ctx, Scope scope)
     {
         MemberAccess acc = new MemberAccess();
 
-        acc.data = parseExpr(ctx.expr(0));
+        acc.data = parseExpr(ctx.expr(0), scope);
         acc.name = ctx.IDENTIFIER().getText();
         return (acc);
     }
 
-    private static MemberFunctionCall parseMemberFunctionCall(BPSLParser.ExprContext ctx)
+    private static MemberFunctionCall parseMemberFunctionCall(BPSLParser.ExprContext ctx, Scope scope)
     {
         MemberFunctionCall fc = new MemberFunctionCall();
 
-        fc.data = parseExpr(ctx.expr(0));
+        fc.data = parseExpr(ctx.expr(0), scope);
         fc.name = ctx.functionCall().name.getText();
         for (int i = 0 ; i < ctx.functionCall().expr().size() ; ++i)
-            fc.parameters.add(parseExpr(ctx.functionCall().expr(i)));
+            fc.parameters.add(parseExpr(ctx.functionCall().expr(i), scope));
         return (fc);
     }
 
-    private static FunctionCall parseFunctionCall(BPSLParser.FunctionCallContext ctx)
+    private static FunctionCall parseFunctionCall(BPSLParser.FunctionCallContext ctx, Scope scope)
     {
         FunctionCall fc = new FunctionCall();
 
         fc.name = ctx.name.getText();
         for (int i = 0 ; i < ctx.expr().size() ; ++i)
-            fc.parameters.add(parseExpr(ctx.expr(i)));
+            fc.parameters.add(parseExpr(ctx.expr(i), scope));
         return (fc);
     }
 
-    private static PrimaryExpr parsePrimary(BPSLParser.ExprContext ctx)
+    private static PrimaryExpr parsePrimary(BPSLParser.ExprContext ctx, Scope scope)
     {
         PrimaryExpr expr = new PrimaryExpr();
 
-        expr.expr = parseExpr(ctx.expr(0));
+        expr.expr = parseExpr(ctx.expr(0), scope);
         return (expr);
     }
 
-    private static Expr parseLitteralOrID(BPSLParser.ExprContext ctx)
+    private static Expr parseLitteralOrID(BPSLParser.ExprContext ctx, Scope scope)
     {
         Expr ex = null;
 
@@ -78,11 +79,15 @@ public class ExpressionParser
         else if (ctx.L_STRING() != null)
             ex = new StringLitteral(ctx.L_STRING().getText());
         else
+        {
             ex = new Identifier(ctx.IDENTIFIER().getText());
+            if (scope.resolve(ctx.IDENTIFIER().getText()) == null)
+                Scope.Error(ctx, "Use of undeclared identifier '" + ctx.IDENTIFIER().getText() + "'");
+        }
         return (ex);
     }
 
-    private static BinaryExpr parseBinary(BPSLParser.ExprContext ctx)
+    private static BinaryExpr parseBinary(BPSLParser.ExprContext ctx, Scope scope)
     {
         BinaryExpr expr = new BinaryExpr();
 
@@ -158,12 +163,12 @@ public class ExpressionParser
             expr.optype = BinaryExpr.EType.ASSIGNMENT;
             break;
         }
-        expr.left = parseExpr(ctx.expr(0));
-        expr.right = parseExpr(ctx.expr(1));
+        expr.left = parseExpr(ctx.expr(0), scope);
+        expr.right = parseExpr(ctx.expr(1), scope);
         return (expr);
     }
 
-    private static UnaryExpr parseUnary(BPSLParser.ExprContext ctx)
+    private static UnaryExpr parseUnary(BPSLParser.ExprContext ctx, Scope scope)
     {
         UnaryExpr expr = new UnaryExpr();
 
@@ -182,36 +187,36 @@ public class ExpressionParser
             expr.optype = UnaryExpr.EType.NOT;
             break;
         }
-        expr.left = parseExpr(ctx.expr(0));
+        expr.left = parseExpr(ctx.expr(0), scope);
         return (expr);
     }
 
-    public static Expr parseExpr(BPSLParser.ExprContext ctx)
+    public static Expr parseExpr(BPSLParser.ExprContext ctx, Scope scope)
     {
         Expr ex = null;
 
         if (ctx.op != null)
         {
             if (ctx.op.getType() == BPSLLexer.SBRACE_OPEN)
-                ex = parseSubscript(ctx);
+                ex = parseSubscript(ctx, scope);
             else if (ctx.op.getType() == BPSLLexer.DOT)
             {
                 if (ctx.functionCall() == null)
-                    ex = parseMemberAccess(ctx);
+                    ex = parseMemberAccess(ctx, scope);
                 else
-                    ex = parseMemberFunctionCall(ctx);
+                    ex = parseMemberFunctionCall(ctx, scope);
             }
             else if (ctx.expr(0) != null && ctx.expr(1) != null)
-                ex = parseBinary(ctx);
+                ex = parseBinary(ctx, scope);
             else
-                ex = parseUnary(ctx);
+                ex = parseUnary(ctx, scope);
         }
         else if (ctx.functionCall() != null)
-            ex = parseFunctionCall(ctx.functionCall());
+            ex = parseFunctionCall(ctx.functionCall(), scope);
         else if (ctx.expr(0) != null)
-            ex = parsePrimary(ctx);
+            ex = parsePrimary(ctx, scope);
         else
-            ex = parseLitteralOrID(ctx);
+            ex = parseLitteralOrID(ctx, scope);
         return (ex);
     }
 }
