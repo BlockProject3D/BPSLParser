@@ -28,7 +28,8 @@ public class ClassVisitor extends BPSLBaseVisitor<Class>
             tn.type = ctx.attribute(i).type.getText();
             st.attributes.add(tn);
         }
-
+        for (int i = 0 ; i < ctx.function().size() ; ++i)
+            st.members.add(FunctionVisitor.parseFunction(ctx.function(i), scope));
         scope.classes.put(st.name, st);
         return (st);
     }
