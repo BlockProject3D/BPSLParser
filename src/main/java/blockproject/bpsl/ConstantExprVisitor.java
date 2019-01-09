@@ -1,7 +1,19 @@
 package blockproject.bpsl;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import blockproject.bpsl.ast.ConstantExpr;
+
 public class ConstantExprVisitor extends BPSLBaseVisitor<ConstantExpr>
 {
+    private Scope scope;
+
+    public ConstantExprVisitor(Scope sc)
+    {
+        scope = sc;
+    }
+
     private int operationInt(BPSLParser.ConstantExprContext ctx)
     {
         int value0 = resolveInt(ctx.constantExpr(0));
@@ -30,7 +42,6 @@ public class ConstantExprVisitor extends BPSLBaseVisitor<ConstantExpr>
             return (-value0);
         float value1 = resolveFloat(ctx.constantExpr(1));
 
-        System.out.println(value0 + ctx.op.getText() + value1);
         switch (ctx.op.getType())
         {
         case BPSLLexer.PLUS:
@@ -125,7 +136,7 @@ public class ConstantExprVisitor extends BPSLBaseVisitor<ConstantExpr>
             expr.valueInt = (int)expr.valueDouble;
             break;
         }
-        System.out.println("New constant " + expr.name + " = " + expr.valueDouble + ";");
+        scope.constants.put(expr.name, expr);
         return (expr);
     }
 }

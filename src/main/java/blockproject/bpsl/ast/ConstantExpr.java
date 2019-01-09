@@ -1,4 +1,4 @@
-package blockproject.bpsl;
+package blockproject.bpsl.ast;
 
 public class ConstantExpr
 {
