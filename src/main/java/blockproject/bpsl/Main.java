@@ -4,7 +4,10 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
+import blockproject.bpsl.translator.Translator;
+import blockproject.bpsl.visitor.ClassVisitor;
 import blockproject.bpsl.visitor.ConstantExprVisitor;
+import blockproject.bpsl.visitor.FunctionVisitor;
 import blockproject.bpsl.visitor.StructVisitor;
 
 public class Main
@@ -13,7 +16,8 @@ public class Main
     {
         String file = null;
         String target = null;
-        
+        Translator tr = null;
+
         for (int i = 0 ; i < args.length ; ++i)
         {
             if (args[i].equalsIgnoreCase("-in") && i < args.length)
@@ -26,7 +30,14 @@ public class Main
             System.err.println("USAGE <program> -in <input BPSL source file> -target <target API GLSL/HLSL/MSL/VGLSL>");
             return;
         }
-        try {
+        tr = Translator.resolve(target);
+        if (tr == null)
+        {
+            System.err.println("Unsupported translator name " + target);
+            return;
+        }
+        try
+        {
             CharStream stream = CharStreams.fromFileName(file);
             BPSLLexer lexer = new BPSLLexer(stream);
             BPSLParser parser = new BPSLParser(new CommonTokenStream(lexer));
@@ -36,8 +47,14 @@ public class Main
             constants.visit(ctx);
             StructVisitor structs = new StructVisitor(sc);
             structs.visit(ctx);
-            
-        } catch (Exception e) {
+            FunctionVisitor functions = new FunctionVisitor(sc);
+            functions.visit(ctx);
+            ClassVisitor classes = new ClassVisitor(sc);
+            classes.visit(ctx);
+            tr.translate(sc);
+        }
+        catch (Exception e)
+        {
             System.err.println("==========================");
             e.printStackTrace();
             System.err.println("Exception while parsing : " + e.getMessage());
