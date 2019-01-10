@@ -104,7 +104,7 @@ bpsl: block*;
 
 block: structure | function | classFucker | constantDefinition;
 
-structure: STRUCT qualifier name=IDENTIFIER CBRACE_OPEN attribute* CBRACE_CLOSE;
+structure: STRUCT qualifier? name=IDENTIFIER CBRACE_OPEN attribute* CBRACE_CLOSE;
 
 classFucker: CLASS name=IDENTIFIER CBRACE_OPEN (attribute | function)* CBRACE_CLOSE;
 

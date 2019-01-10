@@ -58,6 +58,8 @@ public class StatementParser
 
         v.typeName.type = ctx.type.getText();
         v.typeName.name = ctx.name.getText();
+        if (scope.resolveType(v.typeName.type) == null)
+            Scope.Error(ctx, "Use of undefined type '" + v.typeName.type + "'");
         v.value = ExpressionParser.parseExpr(ctx.expr(), scope);
         scope.variables.put(v.typeName.name, v);
         return (v);

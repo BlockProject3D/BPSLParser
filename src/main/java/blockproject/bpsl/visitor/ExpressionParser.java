@@ -3,6 +3,8 @@ package blockproject.bpsl.visitor;
 import blockproject.bpsl.BPSLLexer;
 import blockproject.bpsl.BPSLParser;
 import blockproject.bpsl.Scope;
+import blockproject.bpsl.ast.Class;
+import blockproject.bpsl.ast.Struct;
 import blockproject.bpsl.ast.expr.ArraySubscript;
 import blockproject.bpsl.ast.expr.BinaryExpr;
 import blockproject.bpsl.ast.expr.DoubleLitteral;
@@ -25,6 +27,7 @@ public class ExpressionParser
 
         sub.array = parseExpr(ctx.expr(0), scope);
         sub.index = parseExpr(ctx.expr(1), scope);
+        sub.typeName = sub.array.typeName;
         return (sub);
     }
 
@@ -33,7 +36,24 @@ public class ExpressionParser
         MemberAccess acc = new MemberAccess();
 
         acc.data = parseExpr(ctx.expr(0), scope);
+        if (scope.resolve(acc.data.typeName) == null
+            || (!(scope.resolve(acc.data.typeName) instanceof Class) && !(scope.resolve(acc.data.typeName) instanceof Struct)))
+            Scope.Error(ctx, "Attempt to access attribute on undefined type '" + acc.data.typeName + "'");
         acc.name = ctx.IDENTIFIER().getText();
+        if (scope.resolve(acc.data.typeName) instanceof Struct)
+        {
+            Struct st = (Struct) scope.resolve(acc.data.typeName);
+            if (st.findAttributeByName(acc.name) == null)
+                Scope.Error(ctx, "Attempt to access undefined attribute '" + acc.data.typeName + "::" + acc.name + "'");
+            acc.typeName = st.findAttributeByName(acc.name).type;
+        }
+        else
+        {
+            Class cl = (Class) scope.resolve(acc.data.typeName);
+            if (cl.findAttributeByName(acc.name) == null)
+                Scope.Error(ctx, "Attempt to access undefined attribute '" + acc.data.typeName + "::" + acc.name + "'");
+            acc.typeName = cl.findAttributeByName(acc.name).type;
+        }
         return (acc);
     }
 
@@ -42,7 +62,13 @@ public class ExpressionParser
         MemberFunctionCall fc = new MemberFunctionCall();
 
         fc.data = parseExpr(ctx.expr(0), scope);
+        if (scope.resolve(fc.data.typeName) == null || !(scope.resolve(fc.data.typeName) instanceof Class))
+            Scope.Error(ctx, "Attempt to call function on undefined type '" + fc.data.typeName + "'");
+        Class cl = (Class) scope.resolve(fc.data.typeName);
         fc.name = ctx.functionCall().name.getText();
+        if (cl.findFunctionByName(fc.name) == null)
+            Scope.Error(ctx, "Attempt to call undefined function '" + fc.data.typeName + "::" + fc.name + "'");
+        fc.typeName = cl.findFunctionByName(fc.name).typeName.type;
         for (int i = 0 ; i < ctx.functionCall().expr().size() ; ++i)
             fc.parameters.add(parseExpr(ctx.functionCall().expr(i), scope));
         return (fc);
@@ -53,6 +79,9 @@ public class ExpressionParser
         FunctionCall fc = new FunctionCall();
 
         fc.name = ctx.name.getText();
+        if (scope.resolve(fc.name) == null)
+            Scope.Error(ctx, "Attempt to call undefined function '" + fc.name + "'");
+        fc.typeName = scope.resolveTypeName(fc.name);
         for (int i = 0 ; i < ctx.expr().size() ; ++i)
             fc.parameters.add(parseExpr(ctx.expr(i), scope));
         return (fc);
@@ -63,6 +92,7 @@ public class ExpressionParser
         PrimaryExpr expr = new PrimaryExpr();
 
         expr.expr = parseExpr(ctx.expr(0), scope);
+        expr.typeName = expr.expr.typeName;
         return (expr);
     }
 
@@ -83,6 +113,7 @@ public class ExpressionParser
             ex = new Identifier(ctx.IDENTIFIER().getText());
             if (scope.resolve(ctx.IDENTIFIER().getText()) == null)
                 Scope.Error(ctx, "Use of undeclared identifier '" + ctx.IDENTIFIER().getText() + "'");
+            ex.typeName = scope.resolveTypeName(ctx.IDENTIFIER().getText());
         }
         return (ex);
     }
@@ -165,6 +196,9 @@ public class ExpressionParser
         }
         expr.left = parseExpr(ctx.expr(0), scope);
         expr.right = parseExpr(ctx.expr(1), scope);
+        if (expr.left.typeName != expr.right.typeName)
+            Scope.Warning(ctx, "Conversion from '" + expr.right.typeName + "' to '" + expr.left.typeName);
+        expr.typeName = expr.right.typeName;
         return (expr);
     }
 
@@ -188,6 +222,7 @@ public class ExpressionParser
             break;
         }
         expr.left = parseExpr(ctx.expr(0), scope);
+        expr.typeName = expr.left.typeName;
         return (expr);
     }
 

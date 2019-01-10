@@ -26,6 +26,8 @@ public class ClassVisitor extends BPSLBaseVisitor<Class>
             TypeName tn = new TypeName();
             tn.name = ctx.attribute(i).name.getText();
             tn.type = ctx.attribute(i).type.getText();
+            if (scope.resolveType(tn.type) == null)
+                Scope.Error(ctx, "Use of undefined type '" + tn.type + "'");
             st.attributes.add(tn);
         }
         for (int i = 0 ; i < ctx.function().size() ; ++i)

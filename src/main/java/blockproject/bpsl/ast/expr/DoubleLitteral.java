@@ -8,5 +8,6 @@ public class DoubleLitteral extends Expr
     {
         super(EType.DOUBLE_LITTERAL);
         value = val;
+        typeName = "double";
     }
 }

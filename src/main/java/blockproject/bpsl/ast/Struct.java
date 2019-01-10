@@ -15,4 +15,14 @@ public class Struct
     public String name;
     public EQualifier qualifier;
     public List<TypeName> attributes = new ArrayList<>();
+
+    public TypeName findAttributeByName(String name)
+    {
+        for (TypeName f : attributes)
+        {
+            if (f.name.equals(name))
+                return (f);
+        }
+        return (null);
+    }
 }

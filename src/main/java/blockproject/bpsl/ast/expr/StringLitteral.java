@@ -8,5 +8,6 @@ public class StringLitteral extends Expr
     {
         super(EType.STRING_LITTERAL);
         value = val;
+        typeName = "string";
     }
 }

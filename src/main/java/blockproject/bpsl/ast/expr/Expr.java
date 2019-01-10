@@ -17,7 +17,9 @@ public class Expr
         IDENTIFIER,
         STRING_LITTERAL,
     }
+
     public EType type;
+    public String typeName;
 
     public Expr(EType t)
     {

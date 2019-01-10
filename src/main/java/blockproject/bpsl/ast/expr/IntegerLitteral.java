@@ -8,5 +8,6 @@ public class IntegerLitteral extends Expr
     {
         super(EType.INTEGER_LITTERAL);
         value = val;
+        typeName = "int";
     }
 }

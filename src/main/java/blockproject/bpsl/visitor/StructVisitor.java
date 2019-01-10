@@ -35,6 +35,8 @@ public class StructVisitor extends BPSLBaseVisitor<Struct>
             TypeName tn = new TypeName();
             tn.name = ctx.attribute(i).name.getText();
             tn.type = ctx.attribute(i).type.getText();
+            if (scope.resolveType(tn.type) == null)
+                Scope.Error(ctx, "Use of undefined type '" + tn.type + "'");
             st.attributes.add(tn);
         }
         scope.structs.put(st.name, st);

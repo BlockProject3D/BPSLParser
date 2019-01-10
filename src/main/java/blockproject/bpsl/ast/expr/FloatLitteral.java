@@ -8,5 +8,6 @@ public class FloatLitteral extends Expr
     {
         super(EType.FLOAT_LITTERAL);
         value = val;
+        typeName = "float";
     }
 }
