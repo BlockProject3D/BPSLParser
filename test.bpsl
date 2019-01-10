@@ -20,6 +20,21 @@ struct vlayout Vertex
 	float TexturePos[2];
 }
 
+class Vec2
+{
+	float X;
+	float Y;
+
+	Vec2 __negate()
+	{
+		Vec2 res;
+
+		res.X = -this.X;
+		res.Y = -this.Y;
+		return (res);
+	}
+}
+
 int main()
 {
 	int i = 0;

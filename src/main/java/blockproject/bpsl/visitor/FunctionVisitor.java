@@ -43,6 +43,8 @@ public class FunctionVisitor extends BPSLBaseVisitor<Function>
     @Override
     public Function visitFunction(BPSLParser.FunctionContext ctx)
     {
+        if (ctx.name.getText().equals("##REMOVED##"))
+            return (null);
         Function fc = parseFunction(ctx, scope);
         
         scope.functions.put(fc.typeName.name, fc);

@@ -1,10 +1,14 @@
 package blockproject.bpsl.visitor;
 
+import org.antlr.v4.runtime.CommonToken;
+
 import blockproject.bpsl.BPSLBaseVisitor;
+import blockproject.bpsl.BPSLLexer;
 import blockproject.bpsl.BPSLParser;
 import blockproject.bpsl.Scope;
 import blockproject.bpsl.ast.Class;
 import blockproject.bpsl.ast.TypeName;
+import blockproject.bpsl.ast.statement.Variable;
 
 public class ClassVisitor extends BPSLBaseVisitor<Class>
 {
@@ -30,8 +34,19 @@ public class ClassVisitor extends BPSLBaseVisitor<Class>
                 Scope.Error(ctx, "Use of undefined type '" + tn.type + "'");
             st.attributes.add(tn);
         }
+        scope.classes.put(st.name, st);
+        Variable v = new Variable();
+        v.typeName.name = "this";
+        v.typeName.type = st.name;
+        scope.variables.put("this", v);
         for (int i = 0 ; i < ctx.function().size() ; ++i)
+        {
             st.members.add(FunctionVisitor.parseFunction(ctx.function(i), scope));
+            CommonToken t = new CommonToken(0);
+            t.setText("##REMOVED##");
+            ctx.function(i).name = t;
+        }
+        scope.variables.remove("this");
         scope.classes.put(st.name, st);
         return (st);
     }
