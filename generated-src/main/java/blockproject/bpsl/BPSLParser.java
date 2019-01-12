@@ -1,4 +1,4 @@
-// Generated from blockproject/bpsl/BPSL.g4 by ANTLR 4.7.1
+// Generated from blockproject\bpsl\BPSL.g4 by ANTLR 4.7.1
 
     package blockproject.bpsl;
 
