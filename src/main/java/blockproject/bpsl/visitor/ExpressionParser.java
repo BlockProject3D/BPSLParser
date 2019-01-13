@@ -196,8 +196,11 @@ public class ExpressionParser
         }
         expr.left = parseExpr(ctx.expr(0), scope);
         expr.right = parseExpr(ctx.expr(1), scope);
+        Object obj = scope.resolve(expr.left.typeName);
+        if (obj == null || !(obj instanceof Class))
+            Scope.Error(ctx, "Attempt to perform binary operation on non-type '" + expr.left.typeName + "'");
         if (expr.left.typeName != expr.right.typeName)
-            Scope.Warning(ctx, "Conversion from '" + expr.right.typeName + "' to '" + expr.left.typeName);
+            Scope.Warning(ctx, "Conversion from '" + expr.right.typeName + "' to '" + expr.left.typeName + "'");
         expr.typeName = expr.right.typeName;
         return (expr);
     }
@@ -222,6 +225,9 @@ public class ExpressionParser
             break;
         }
         expr.left = parseExpr(ctx.expr(0), scope);
+        Object obj = scope.resolve(expr.left.typeName);
+        if (obj == null || !(obj instanceof Class))
+            Scope.Error(ctx, "Attempt to perform binary operation on non-type '" + expr.left.typeName + "'");
         expr.typeName = expr.left.typeName;
         return (expr);
     }

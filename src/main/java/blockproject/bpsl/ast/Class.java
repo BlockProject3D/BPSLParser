@@ -12,7 +12,7 @@ public class Class
     public List<Function> members = new ArrayList<>();
     public List<TypeName> attributes = new ArrayList<>();
     
-    private static String[] OP_FUNC_NAMES_BIN = new String[]
+    private static final String[] OP_FUNC_NAMES_BIN = new String[]
     {
         "__mul",
         "__div",
@@ -39,7 +39,7 @@ public class Class
         null
     };
 
-    private static String[] OP_FUNC_NAMES_UN = new String[]
+    private static final String[] OP_FUNC_NAMES_UN = new String[]
     {
         null,
         "__inc",

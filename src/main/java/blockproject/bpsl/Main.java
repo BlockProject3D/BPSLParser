@@ -6,6 +6,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 
 import blockproject.bpsl.ast.Struct;
 import blockproject.bpsl.ast.Struct.EQualifier;
+import blockproject.bpsl.ast.expr.Expr;
 import blockproject.bpsl.translator.Translator;
 import blockproject.bpsl.visitor.ClassVisitor;
 import blockproject.bpsl.visitor.ConstantExprVisitor;
@@ -28,10 +29,8 @@ public class Main
     {
         Scope sc = new Scope();
 
-        createInternalType(sc, "int");
-        createInternalType(sc, "float");
-        createInternalType(sc, "double");
-        createInternalType(sc, "uint");
+        for (String s : Expr.BASE_TYPES)
+            createInternalType(sc, s);
         return (sc);
     }
 

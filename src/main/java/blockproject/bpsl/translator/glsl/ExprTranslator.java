@@ -24,6 +24,15 @@ public abstract class ExprTranslator
         return (null);
     }
 
+    public static String translateExpr(Expr expr)
+    {
+        ExprTranslator tr = getTranslator(expr.type);
+        
+        if (tr == null)
+            return ("");
+        return (tr.translate(expr));
+    }
+
     static
     {
 
