@@ -151,7 +151,7 @@ public class ExpressionParser
         return (ex);
     }
 
-    private static BinaryExpr parseBinary(BPSLParser.ExprContext ctx, Scope scope)
+    private static Expr parseBinary(BPSLParser.ExprContext ctx, Scope scope)
     {
         BinaryExpr expr = new BinaryExpr();
 
@@ -234,11 +234,28 @@ public class ExpressionParser
             Scope.Error(ctx, "Attempt to perform binary operation on non-type '" + expr.left.typeName + "'");
         if (expr.left.typeName != expr.right.typeName)
             Scope.Warning(ctx, "Conversion from '" + expr.right.typeName + "' to '" + expr.left.typeName + "'");
+        if (obj instanceof Class && ((Class)obj).internalName == null)
+        {
+            Class cl = (Class) obj;
+            List<TypeName> l = new ArrayList<>();
+            TypeName tn = new TypeName();
+            tn.type = expr.right.typeName;
+            l.add(tn);
+            Function fc = cl.findBinaryOperatorFunction(expr.optype, l);
+            if (fc == null)
+                Scope.Error(ctx, "No operator overload matches for expression '" + expr.left.typeName + ctx.op.getText() + expr.right.typeName + "'");
+            MemberFunctionCall fcm = new MemberFunctionCall();
+            fcm.typeName = fc.typeName.type;
+            fcm.data = expr.left;
+            fcm.name = fc.typeName.name;
+            fcm.parameters.add(expr.right);
+            return (fcm);
+        }
         expr.typeName = expr.right.typeName;
         return (expr);
     }
 
-    private static UnaryExpr parseUnary(BPSLParser.ExprContext ctx, Scope scope)
+    private static Expr parseUnary(BPSLParser.ExprContext ctx, Scope scope)
     {
         UnaryExpr expr = new UnaryExpr();
 
@@ -261,6 +278,18 @@ public class ExpressionParser
         Object obj = scope.resolve(expr.left.typeName);
         if (!Scope.isScalarType(expr.left.typeName) && (obj == null || !(obj instanceof Class)))
             Scope.Error(ctx, "Attempt to perform unary operation on non-type '" + expr.left.typeName + "'");
+        if (obj instanceof Class && ((Class)obj).internalName == null)
+        {
+            Class cl = (Class) obj;
+            Function fc = cl.findUnaryOperatorFunction(expr.optype);
+            if (fc == null)
+                Scope.Error(ctx, "No operator overload matches for expression '" + ctx.op.getText() + expr.left.typeName + "'");
+            MemberFunctionCall fcm = new MemberFunctionCall();
+            fcm.typeName = fc.typeName.type;
+            fcm.data = expr.left;
+            fcm.name = fc.typeName.name;
+            return (fcm);
+        }    
         expr.typeName = expr.left.typeName;
         return (expr);
     }
