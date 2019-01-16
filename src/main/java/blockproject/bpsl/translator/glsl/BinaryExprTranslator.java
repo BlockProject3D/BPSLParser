@@ -72,8 +72,7 @@ public class BinaryExprTranslator extends ExprTranslator {
         String right = ExprTranslator.translateExpr(expr2.right);
         String op = translateOp(expr2.optype);
 
-
-		return ("");
+		return (left + " " + op + " " + right);
 	}
 
 }

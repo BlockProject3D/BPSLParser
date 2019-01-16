@@ -35,6 +35,7 @@ public abstract class ExprTranslator
 
     static
     {
-
+        register(new BinaryExprTranslator());
+        register(new UnaryExprTranslator());
     }
 }
