@@ -1,4 +1,4 @@
-// Generated from blockproject\bpsl\BPSL.g4 by ANTLR 4.7.1
+// Generated from blockproject/bpsl/BPSL.g4 by ANTLR 4.7.1
 
     package blockproject.bpsl;
 
@@ -19,6 +19,16 @@ public interface BPSLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBpsl(BPSLParser.BpslContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BPSLParser#annotation}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnnotation(BPSLParser.AnnotationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BPSLParser#annotation}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnnotation(BPSLParser.AnnotationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link BPSLParser#block}.
 	 * @param ctx the parse tree
@@ -69,6 +79,16 @@ public interface BPSLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFunction(BPSLParser.FunctionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BPSLParser#constructor}.
+	 * @param ctx the parse tree
+	 */
+	void enterConstructor(BPSLParser.ConstructorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BPSLParser#constructor}.
+	 * @param ctx the parse tree
+	 */
+	void exitConstructor(BPSLParser.ConstructorContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link BPSLParser#attribute}.
 	 * @param ctx the parse tree

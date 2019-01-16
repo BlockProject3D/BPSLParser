@@ -1,4 +1,4 @@
-// Generated from blockproject\bpsl\BPSL.g4 by ANTLR 4.7.1
+// Generated from blockproject/bpsl/BPSL.g4 by ANTLR 4.7.1
 
     package blockproject.bpsl;
 
@@ -25,6 +25,18 @@ public class BPSLBaseListener implements BPSLListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBpsl(BPSLParser.BpslContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotation(BPSLParser.AnnotationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotation(BPSLParser.AnnotationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -85,6 +97,18 @@ public class BPSLBaseListener implements BPSLListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitFunction(BPSLParser.FunctionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterConstructor(BPSLParser.ConstructorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitConstructor(BPSLParser.ConstructorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

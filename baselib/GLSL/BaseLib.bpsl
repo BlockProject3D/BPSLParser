@@ -1,0 +1,33 @@
+@Import "<Vec2>"
+@Import "<Vec3>"
+@Import "<Vec4>"
+
+@Internal "cos($val)"
+float Cos(float val)
+{
+}
+
+@Internal "sin($val)"
+float Sin(float val)
+{
+}
+
+@Internal "tan($val)"
+float Tan(float val)
+{
+}
+
+@Internal "acos($val)"
+float ArcCos(float val)
+{
+}
+
+@Internal "asin($val)"
+float ArcSin(float val)
+{
+}
+
+@Internal "atan($val)"
+float ArcTan(float val)
+{
+}

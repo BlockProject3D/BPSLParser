@@ -11,6 +11,15 @@ public class StructVisitor extends BPSLBaseVisitor<Struct>
 {
     private Scope scope;
 
+    public static String parseInternalString(BPSLParser.AnnotationContext ctx)
+    {
+        if (ctx == null)
+            return (null);
+        if (ctx.name.getText().equals("Internal"))
+            return (ctx.value.getText());
+        return (null);
+    }
+
     public StructVisitor(Scope sc)
     {
         scope = sc;
@@ -39,6 +48,7 @@ public class StructVisitor extends BPSLBaseVisitor<Struct>
                 Scope.Error(ctx, "Use of undefined type '" + tn.type + "'");
             st.attributes.add(tn);
         }
+        st.internalName = parseInternalString(ctx.annotation());
         scope.structs.put(st.name, st);
         return (st);
     }

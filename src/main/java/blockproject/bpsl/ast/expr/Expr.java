@@ -15,6 +15,7 @@ public class Expr
         BINARY_OPERATION,
         UNARY_OPERATION,
         FUNCTION_CALL,
+        CONSTRUCTOR_CALL,
         ARRAY_SUBSCRIPT,
         MEMBER_ACCESS,
         MEMBER_FUNCTION_CALL,

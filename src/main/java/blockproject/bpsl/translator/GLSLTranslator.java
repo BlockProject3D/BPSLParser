@@ -26,6 +26,8 @@ public class GLSLTranslator extends Translator {
     {
         String res = "";
 
+        if (Scope.isScalarType(st.name))
+            return;
         if (st.qualifier == EQualifier.VLAYOUT)
         {
             convertVLayout(st);

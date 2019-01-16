@@ -1,0 +1,62 @@
+@Internal "vec4"
+class Vec4
+{
+    @Internal "x"
+    float X;
+    @Internal "y"
+    float Y;
+    @Internal "z"
+    float Z;
+    @Internal "w"
+    float W;
+
+    @Internal "vec4($x, $y, $z, $w)"
+    Vec4(float x, float y, float z, float w)
+    {
+    }
+
+    Vec4 operator+(Vec4 other)
+    {
+    }
+
+    Vec4 operator-(Vec4 other)
+    {
+    }
+
+    Vec4 operator*(Vec4 other)
+    {
+    }
+
+    Vec4 operator/(Vec4 other)
+    {
+    }
+
+    Vec4 operator-()
+    {
+    }
+
+    @Internal "normalize($this)"
+    void Normalize()
+    {
+    }
+
+    @Internal "dot($this, $other)"
+    float Dot(Vec4 other)
+    {
+    }
+
+    @Internal "length($this)"
+    float Length()
+    {
+    }
+
+    @Internal "distance($this, $other)"
+    float Distance(Vec4 other)
+    {
+    }
+
+    @Internal "cross($this, $other)"
+    Vec3 Cross(Vec4 other)
+    {
+    }
+}

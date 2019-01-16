@@ -1,4 +1,4 @@
-// Generated from blockproject\bpsl\BPSL.g4 by ANTLR 4.7.1
+// Generated from blockproject/bpsl/BPSL.g4 by ANTLR 4.7.1
 
     package blockproject.bpsl;
 
@@ -18,6 +18,12 @@ public interface BPSLVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBpsl(BPSLParser.BpslContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BPSLParser#annotation}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAnnotation(BPSLParser.AnnotationContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link BPSLParser#block}.
 	 * @param ctx the parse tree
@@ -48,6 +54,12 @@ public interface BPSLVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitFunction(BPSLParser.FunctionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BPSLParser#constructor}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConstructor(BPSLParser.ConstructorContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link BPSLParser#attribute}.
 	 * @param ctx the parse tree

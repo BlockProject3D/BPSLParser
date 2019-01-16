@@ -47,6 +47,7 @@ public class ClassVisitor extends BPSLBaseVisitor<Class>
             ctx.function(i).name = t;
         }
         scope.variables.remove("this");
+        st.internalName = StructVisitor.parseInternalString(ctx.annotation());
         scope.classes.put(st.name, st);
         return (st);
     }

@@ -1,6 +1,7 @@
 package blockproject.bpsl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -92,5 +93,24 @@ public class Scope
         if (variables.containsKey(name))
             return (variables.get(name).typeName.type);
         return (null);
+    }
+
+    public static boolean isScalarType(String type)
+    {
+        return (type.equals("float") || type.equals("double") || type.equals("int") || type.equals("uint"));
+    }
+
+    public static boolean areParamsIdentical(List<TypeName> src, List<TypeName> search)
+    {
+        if (src.size() != search.size())
+            return (false);
+        for (int i = 0 ; i < src.size() ; ++i)
+        {
+            TypeName s = src.get(i);
+            TypeName s1 = search.get(1);
+            if (!s.type.equals(s1.type))
+                return (false);
+        }
+        return (true);
     }
 }

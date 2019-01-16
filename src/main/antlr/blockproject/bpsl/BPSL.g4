@@ -35,6 +35,7 @@ grammar BPSL;
 
 WS: [ \n\t\r]+ -> skip;
 
+AT: '@';
 STRUCT: 'struct';
 CLASS: 'class';
 CONST: 'const';
@@ -93,27 +94,48 @@ DECREMENT: MINUS MINUS;
 fragment NUMERIC: [0-9];
 fragment UPPER: [A-Z];
 fragment LOWER: [a-z];
+fragment OPERATOR: PLUS
+    | MINUS
+    | MUL
+    | DIV
+    | PLUS_EQUAL
+    | MINUS_EQUAL
+    | MUL_EQUAL
+    | DIV_EQUAL
+    | LESS
+    | LESS_EQUAL
+    | GREATER
+    | GREATER_EQUAL
+    | EQUAL_EQUAL
+    | NOT_EQUAL
+    | INCREMENT
+    | DECREMENT
+    | SBRACE_OPEN SBRACE_CLOSE;
 L_INT: NUMERIC+;
 L_FLOAT: NUMERIC+ DOT NUMERIC+ 'f';
 L_DOUBLE: NUMERIC+ DOT NUMERIC+;
 L_STRING: QUOTE [\u0000-\u00FF]* QUOTE;
 
-IDENTIFIER: (UPPER | LOWER | '_') (UPPER | LOWER | NUMERIC | '_')*;
+IDENTIFIER: (UPPER | LOWER | '_') (UPPER | LOWER | NUMERIC | '_')* OPERATOR? ;
 
 bpsl: block*;
 
+annotation: AT name=IDENTIFIER value=(L_DOUBLE | L_FLOAT | L_INT | L_STRING)?;
+
 block: structure | function | classFucker | constantDefinition;
 
-structure: STRUCT qualifier? name=IDENTIFIER CBRACE_OPEN attribute* CBRACE_CLOSE;
+structure: annotation? STRUCT qualifier? name=IDENTIFIER CBRACE_OPEN attribute* CBRACE_CLOSE;
 
-classFucker: CLASS name=IDENTIFIER CBRACE_OPEN (attribute | function)* CBRACE_CLOSE;
+classFucker: annotation? CLASS name=IDENTIFIER CBRACE_OPEN (attribute | function)* CBRACE_CLOSE;
 
 constantDefinition: CONST type=IDENTIFIER name=IDENTIFIER EQUAL constantExpr SEMICOLON;
 
-function: type=IDENTIFIER name=IDENTIFIER PAR_OPEN (functionParameter COMA)* PAR_CLOSE compoundStatement;
+function: annotation? type=IDENTIFIER name=IDENTIFIER PAR_OPEN (functionParameter COMA)* PAR_CLOSE compoundStatement;
 
-attribute: type=IDENTIFIER name=IDENTIFIER SEMICOLON
-    | type=IDENTIFIER name=IDENTIFIER SBRACE_OPEN constantExpr SBRACE_CLOSE SEMICOLON;
+constructor: annotation? name=IDENTIFIER PAR_OPEN (functionParameter COMA)* PAR_CLOSE compoundStatement;
+
+attribute: annotation? type=IDENTIFIER name=IDENTIFIER SEMICOLON
+    | annotation? type=IDENTIFIER name=IDENTIFIER SBRACE_OPEN constantExpr SBRACE_CLOSE SEMICOLON;
 
 functionParameter: type=IDENTIFIER name=IDENTIFIER
     | type=IDENTIFIER name=IDENTIFIER EQUAL (L_INT | L_FLOAT | L_DOUBLE | L_STRING);

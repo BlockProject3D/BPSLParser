@@ -16,6 +16,8 @@ public class Struct
     public EQualifier qualifier;
     public List<TypeName> attributes = new ArrayList<>();
 
+    public String internalName;
+
     public TypeName findAttributeByName(String name)
     {
         for (TypeName f : attributes)

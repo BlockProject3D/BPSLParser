@@ -1,10 +1,15 @@
 package blockproject.bpsl.visitor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import blockproject.bpsl.BPSLLexer;
 import blockproject.bpsl.BPSLParser;
 import blockproject.bpsl.Scope;
 import blockproject.bpsl.ast.Class;
+import blockproject.bpsl.ast.Function;
 import blockproject.bpsl.ast.Struct;
+import blockproject.bpsl.ast.TypeName;
 import blockproject.bpsl.ast.expr.ArraySubscript;
 import blockproject.bpsl.ast.expr.BinaryExpr;
 import blockproject.bpsl.ast.expr.DoubleLitteral;
@@ -66,12 +71,26 @@ public class ExpressionParser
             Scope.Error(ctx, "Attempt to call function on undefined type '" + fc.data.typeName + "'");
         Class cl = (Class) scope.resolve(fc.data.typeName);
         fc.name = ctx.functionCall().name.getText();
-        if (cl.findFunctionByName(fc.name) == null)
-            Scope.Error(ctx, "Attempt to call undefined function '" + fc.data.typeName + "::" + fc.name + "'");
-        fc.typeName = cl.findFunctionByName(fc.name).typeName.type;
         for (int i = 0 ; i < ctx.functionCall().expr().size() ; ++i)
             fc.parameters.add(parseExpr(ctx.functionCall().expr(i), scope));
+        Function f = cl.findFunctionByName(fc.name, exprListToParamList(fc.parameters));
+        if (f == null)
+            Scope.Error(ctx, "Attempt to call undefined function '" + fc.data.typeName + "::" + fc.name + "'");
+        fc.typeName = f.typeName.type;
         return (fc);
+    }
+
+    private static List<TypeName> exprListToParamList(List<Expr> src)
+    {
+        List<TypeName> res = new ArrayList<>();
+
+        for (Expr ex : src)
+        {
+            TypeName tn = new TypeName();
+            tn.type = ex.typeName;
+            res.add(tn);
+        }
+        return (res);
     }
 
     private static FunctionCall parseFunctionCall(BPSLParser.FunctionCallContext ctx, Scope scope)
@@ -79,11 +98,25 @@ public class ExpressionParser
         FunctionCall fc = new FunctionCall();
 
         fc.name = ctx.name.getText();
-        if (scope.resolve(fc.name) == null)
+        if (scope.resolve(fc.name) == null || (!(scope.resolve(fc.name) instanceof Function) && !(scope.resolve(fc.name) instanceof Class)))
             Scope.Error(ctx, "Attempt to call undefined function '" + fc.name + "'");
         fc.typeName = scope.resolveTypeName(fc.name);
         for (int i = 0 ; i < ctx.expr().size() ; ++i)
             fc.parameters.add(parseExpr(ctx.expr(i), scope));
+        if (scope.resolve(fc.name) instanceof Class)
+        {
+            Class cl = (Class) scope.resolve(fc.name);
+            if (cl.fincConstructor(exprListToParamList(fc.parameters)) == null)
+                Scope.Error(ctx, "Can't find matching constructor");
+            fc.typeName = cl.name;
+        }
+        else
+        {
+            Function f = (Function) scope.resolve(fc.name);
+            if (!Scope.areParamsIdentical(f.parameters, exprListToParamList(fc.parameters)))
+                Scope.Error(ctx, "Function parameters does not match");
+            fc.typeName = f.typeName.type;
+        }
         return (fc);
     }
 
@@ -197,7 +230,7 @@ public class ExpressionParser
         expr.left = parseExpr(ctx.expr(0), scope);
         expr.right = parseExpr(ctx.expr(1), scope);
         Object obj = scope.resolve(expr.left.typeName);
-        if (obj == null || !(obj instanceof Class))
+        if (!Scope.isScalarType(expr.left.typeName) && (obj == null || !(obj instanceof Class)))
             Scope.Error(ctx, "Attempt to perform binary operation on non-type '" + expr.left.typeName + "'");
         if (expr.left.typeName != expr.right.typeName)
             Scope.Warning(ctx, "Conversion from '" + expr.right.typeName + "' to '" + expr.left.typeName + "'");
@@ -226,8 +259,8 @@ public class ExpressionParser
         }
         expr.left = parseExpr(ctx.expr(0), scope);
         Object obj = scope.resolve(expr.left.typeName);
-        if (obj == null || !(obj instanceof Class))
-            Scope.Error(ctx, "Attempt to perform binary operation on non-type '" + expr.left.typeName + "'");
+        if (!Scope.isScalarType(expr.left.typeName) && (obj == null || !(obj instanceof Class)))
+            Scope.Error(ctx, "Attempt to perform unary operation on non-type '" + expr.left.typeName + "'");
         expr.typeName = expr.left.typeName;
         return (expr);
     }
