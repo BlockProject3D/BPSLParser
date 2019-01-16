@@ -19,17 +19,35 @@ public interface BPSLVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBpsl(BPSLParser.BpslContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link BPSLParser#annotation}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAnnotation(BPSLParser.AnnotationContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link BPSLParser#block}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitBlock(BPSLParser.BlockContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BPSLParser#importBlock}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitImportBlock(BPSLParser.ImportBlockContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BPSLParser#sysImport}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSysImport(BPSLParser.SysImportContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BPSLParser#userImport}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUserImport(BPSLParser.UserImportContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BPSLParser#annotation}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAnnotation(BPSLParser.AnnotationContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link BPSLParser#structure}.
 	 * @param ctx the parse tree

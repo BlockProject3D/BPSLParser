@@ -36,6 +36,7 @@ grammar BPSL;
 WS: [ \n\t\r]+ -> skip;
 
 AT: '@';
+IMPORT: 'import';
 STRUCT: 'struct';
 CLASS: 'class';
 CONST: 'const';
@@ -120,9 +121,13 @@ IDENTIFIER: (UPPER | LOWER | '_') (UPPER | LOWER | NUMERIC | '_')* OPERATOR? ;
 
 bpsl: block*;
 
-annotation: AT name=IDENTIFIER value=(L_DOUBLE | L_FLOAT | L_INT | L_STRING)?;
+block: structure | function | classFucker | constantDefinition | importBlock;
 
-block: structure | function | classFucker | constantDefinition | annotation;
+importBlock: IMPORT (sysImport | userImport) SEMICOLON;
+sysImport: LESS name=IDENTIFIER GREATER;
+userImport: QUOTE name=IDENTIFIER QUOTE;
+
+annotation: AT name=IDENTIFIER value=(L_DOUBLE | L_FLOAT | L_INT | L_STRING)?;
 
 structure: annotation? STRUCT qualifier? name=IDENTIFIER CBRACE_OPEN attribute* CBRACE_CLOSE;
 

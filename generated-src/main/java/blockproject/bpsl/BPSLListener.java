@@ -20,16 +20,6 @@ public interface BPSLListener extends ParseTreeListener {
 	 */
 	void exitBpsl(BPSLParser.BpslContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link BPSLParser#annotation}.
-	 * @param ctx the parse tree
-	 */
-	void enterAnnotation(BPSLParser.AnnotationContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link BPSLParser#annotation}.
-	 * @param ctx the parse tree
-	 */
-	void exitAnnotation(BPSLParser.AnnotationContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link BPSLParser#block}.
 	 * @param ctx the parse tree
 	 */
@@ -39,6 +29,46 @@ public interface BPSLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBlock(BPSLParser.BlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BPSLParser#importBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterImportBlock(BPSLParser.ImportBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BPSLParser#importBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitImportBlock(BPSLParser.ImportBlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BPSLParser#sysImport}.
+	 * @param ctx the parse tree
+	 */
+	void enterSysImport(BPSLParser.SysImportContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BPSLParser#sysImport}.
+	 * @param ctx the parse tree
+	 */
+	void exitSysImport(BPSLParser.SysImportContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BPSLParser#userImport}.
+	 * @param ctx the parse tree
+	 */
+	void enterUserImport(BPSLParser.UserImportContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BPSLParser#userImport}.
+	 * @param ctx the parse tree
+	 */
+	void exitUserImport(BPSLParser.UserImportContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BPSLParser#annotation}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnnotation(BPSLParser.AnnotationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BPSLParser#annotation}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnnotation(BPSLParser.AnnotationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link BPSLParser#structure}.
 	 * @param ctx the parse tree

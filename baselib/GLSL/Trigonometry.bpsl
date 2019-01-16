@@ -1,7 +1,3 @@
-@Import "<Vec2>"
-@Import "<Vec3>"
-@Import "<Vec4>"
-
 @Internal "cos($val)"
 float Cos(float val)
 {
