@@ -122,7 +122,7 @@ bpsl: block*;
 
 annotation: AT name=IDENTIFIER value=(L_DOUBLE | L_FLOAT | L_INT | L_STRING)?;
 
-block: structure | function | classFucker | constantDefinition;
+block: structure | function | classFucker | constantDefinition | annotation;
 
 structure: annotation? STRUCT qualifier? name=IDENTIFIER CBRACE_OPEN attribute* CBRACE_CLOSE;
 

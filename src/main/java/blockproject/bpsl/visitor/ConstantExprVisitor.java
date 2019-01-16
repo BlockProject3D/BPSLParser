@@ -15,7 +15,7 @@ public class ConstantExprVisitor extends BPSLBaseVisitor<ConstantExpr>
         scope = sc;
     }
 
-    private int operationInt(BPSLParser.ConstantExprContext ctx)
+    private static int operationInt(BPSLParser.ConstantExprContext ctx)
     {
         int value0 = resolveInt(ctx.constantExpr(0));
         if (ctx.constantExpr(1) == null)
@@ -78,7 +78,7 @@ public class ConstantExprVisitor extends BPSLBaseVisitor<ConstantExpr>
         return (0);
     }
 
-    private int resolveInt(BPSLParser.ConstantExprContext ctx)
+    public static int resolveInt(BPSLParser.ConstantExprContext ctx)
     {
         if (ctx.value != null)
             return (Integer.parseInt(ctx.value.getText()));

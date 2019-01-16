@@ -58,6 +58,8 @@ public class StatementParser
 
         v.typeName.type = ctx.type.getText();
         v.typeName.name = ctx.name.getText();
+        if (ctx.constantExpr() != null)
+            v.typeName.arrSize = ConstantExprVisitor.resolveInt(ctx.constantExpr());
         if (scope.resolveType(v.typeName.type) == null)
             Scope.Error(ctx, "Use of undefined type '" + v.typeName.type + "'");
         if (ctx.expr() != null)

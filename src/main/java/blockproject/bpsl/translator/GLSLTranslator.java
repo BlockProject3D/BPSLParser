@@ -16,7 +16,11 @@ public class GLSLTranslator extends Translator {
 
         for (int i = 0 ; i < st.attributes.size() ; ++i)
         {
-            String line = "layout (location = " + i + ") in " + st.attributes.get(i).type + " " + st.name + "_" + st.attributes.get(i).name + ";\n";
+            String line = null;
+            if (st.attributes.get(i).arrSize > 0)
+                line = "layout (location = " + i + ") in " + st.attributes.get(i).type + " " + st.name + "_" + st.attributes.get(i).name + "[" + st.attributes.get(i).arrSize + "];\n";
+            else
+                line = "layout (location = " + i + ") in " + st.attributes.get(i).type + " " + st.name + "_" + st.attributes.get(i).name + ";\n";
             res += line;
         }
         System.out.println(res);
@@ -40,7 +44,12 @@ public class GLSLTranslator extends Translator {
         res += st.name + "\n";
         res += "{\n";
         for (TypeName attr : st.attributes)
-            res += "\t" + attr.type + " " + attr.name + ";\n";
+        {
+            if (attr.arrSize > 0)
+                res += "\t" + attr.type + " " + attr.name + "[" + attr.arrSize + "];\n";
+            else
+                res += "\t" + attr.type + " " + attr.name + ";\n";
+        }
         res += "};\n";
         System.out.println(res);
     }
