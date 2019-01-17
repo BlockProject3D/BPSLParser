@@ -35,6 +35,10 @@ grammar BPSL;
 
 WS: [ \n\t\r]+ -> skip;
 
+COMMENT: '/*' .*? '*/' -> skip;
+
+LINE_COMMENT: '//' ~[\r\n]* -> skip;
+
 AT: '@';
 IMPORT: 'import';
 STRUCT: 'struct';
@@ -115,29 +119,30 @@ fragment OPERATOR: PLUS
 L_INT: NUMERIC+;
 L_FLOAT: NUMERIC+ DOT NUMERIC+ 'f';
 L_DOUBLE: NUMERIC+ DOT NUMERIC+;
-L_STRING: QUOTE [\u0000-\u00FF]* QUOTE;
+L_STRING: QUOTE ~('\r' | '\n' | '"')* QUOTE;
+L_STRING_1: LESS ~('\r' | '\n' | '<' | '>')* GREATER;
 
 IDENTIFIER: (UPPER | LOWER | '_') (UPPER | LOWER | NUMERIC | '_')* OPERATOR? ;
 
 bpsl: block*;
 
-block: structure | function | classFucker | constantDefinition | importBlock;
+block: structure | classFucker | constantDefinition | importBlock | function;
 
 importBlock: IMPORT (sysImport | userImport) SEMICOLON;
-sysImport: LESS name=IDENTIFIER GREATER;
-userImport: QUOTE name=IDENTIFIER QUOTE;
+sysImport: name=L_STRING_1;
+userImport: name=L_STRING;
 
-annotation: AT name=IDENTIFIER value=(L_DOUBLE | L_FLOAT | L_INT | L_STRING)?;
+annotation: AT name=IDENTIFIER (PAR_OPEN value=L_STRING PAR_CLOSE)?;
 
 structure: annotation? STRUCT qualifier? name=IDENTIFIER CBRACE_OPEN attribute* CBRACE_CLOSE;
 
-classFucker: annotation? CLASS name=IDENTIFIER CBRACE_OPEN (attribute | function)* CBRACE_CLOSE;
+classFucker: annotation? CLASS name=IDENTIFIER CBRACE_OPEN (attribute | constructor | function)* CBRACE_CLOSE;
 
 constantDefinition: CONST type=IDENTIFIER name=IDENTIFIER EQUAL constantExpr SEMICOLON;
 
-function: annotation? type=IDENTIFIER name=IDENTIFIER PAR_OPEN (functionParameter COMA)* PAR_CLOSE compoundStatement;
+function: annotation? type=IDENTIFIER name=IDENTIFIER PAR_OPEN (functionParameter COMA?)* PAR_CLOSE (compoundStatement | SEMICOLON);
 
-constructor: annotation? name=IDENTIFIER PAR_OPEN (functionParameter COMA)* PAR_CLOSE compoundStatement;
+constructor: annotation? name=IDENTIFIER PAR_OPEN (functionParameter COMA?)* PAR_CLOSE (compoundStatement | SEMICOLON);
 
 attribute: annotation? type=IDENTIFIER name=IDENTIFIER SEMICOLON
     | annotation? type=IDENTIFIER name=IDENTIFIER SBRACE_OPEN constantExpr SBRACE_CLOSE SEMICOLON;

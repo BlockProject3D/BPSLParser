@@ -1,53 +1,33 @@
-@Internal "vec2"
+@Internal("vec2")
 class Vec2
 {
-    @Internal "x"
+    @Internal("x")
     float X;
-    @Internal "y"
+    @Internal("y")
     float Y;
 
-    @Internal "vec2($x, $y)"
-    Vec2(float x, float y)
-    {
-    }
+    @Internal("vec2($x, $y)")
+    Vec2(float x, float y);
 
-    Vec2 operator+(Vec2 other)
-    {
-    }
+    Vec2 operator+(Vec2 other);
 
-    Vec2 operator-(Vec2 other)
-    {
-    }
+    Vec2 operator-(Vec2 other);
 
-    Vec2 operator*(Vec2 other)
-    {
-    }
+    Vec2 operator*(Vec2 other);
 
-    Vec2 operator/(Vec2 other)
-    {
-    }
+    Vec2 operator/(Vec2 other);
 
-    Vec2 operator-()
-    {
-    }
+    Vec2 operator-();
 
-    @Internal "normalize($this)"
-    void Normalize()
-    {
-    }
+    @Internal("normalize($this)")
+    void Normalize();
 
-    @Internal "dot($this, $other)"
-    float Dot(Vec2 other)
-    {
-    }
+    @Internal("dot($this, $other)")
+    float Dot(Vec2 other);
 
-    @Internal "length($this)"
-    float Length()
-    {
-    }
+    @Internal("length($this)")
+    float Length();
 
-    @Internal "distance($this, $other)"
-    float Distance(Vec2 other)
-    {
-    }
+    @Internal("distance($this, $other)")
+    float Distance(Vec2 other);
 }

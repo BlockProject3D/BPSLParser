@@ -67,3 +67,13 @@ shadowJar {
 }
 
 assemble.dependsOn shadowJar
+
+task grun {
+    doLast {
+        javaexec {
+            classpath = project.getConfigurations().getByName(AntlrPlugin.ANTLR_CONFIGURATION_NAME) + sourceSets.main.runtimeClasspath
+	        main = 'org.antlr.v4.gui.TestRig'
+            args = ['blockproject.bpsl.BPSL', 'bpsl', '-gui', file]
+        }
+    }
+}

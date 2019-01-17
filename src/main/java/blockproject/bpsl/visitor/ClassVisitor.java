@@ -3,7 +3,6 @@ package blockproject.bpsl.visitor;
 import org.antlr.v4.runtime.CommonToken;
 
 import blockproject.bpsl.BPSLBaseVisitor;
-import blockproject.bpsl.BPSLLexer;
 import blockproject.bpsl.BPSLParser;
 import blockproject.bpsl.Scope;
 import blockproject.bpsl.ast.Class;

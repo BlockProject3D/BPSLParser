@@ -34,8 +34,11 @@ public class FunctionVisitor extends BPSLBaseVisitor<Function>
                 Scope.Error(ctx, "Use of undefined type '" + tn.type + "'");
             func.parameters.add(tn);
         }
-        for (int i = 0 ; i < ctx.compoundStatement().statement().size() ; ++i)
-            func.statements.add(StatementParser.parseStatement(ctx.compoundStatement().statement(i), sc));
+        if (ctx.compoundStatement() != null)
+        {
+            for (int i = 0 ; i < ctx.compoundStatement().statement().size() ; ++i)
+                func.statements.add(StatementParser.parseStatement(ctx.compoundStatement().statement(i), sc));
+        }
         sc.curFunction = null;
         func.internalName = StructVisitor.parseInternalString(ctx.annotation());
         return (func);

@@ -7,7 +7,8 @@ public class Expr
         "int",
         "float",
         "double",
-        "uint"
+        "uint",
+        "void"
     };
 
     public enum EType
