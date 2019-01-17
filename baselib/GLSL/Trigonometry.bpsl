@@ -1,29 +1,17 @@
 @Internal "cos($val)"
-float Cos(float val)
-{
-}
+float Cos(float val);
 
 @Internal "sin($val)"
-float Sin(float val)
-{
-}
+float Sin(float val);
 
 @Internal "tan($val)"
-float Tan(float val)
-{
-}
+float Tan(float val);
 
 @Internal "acos($val)"
-float ArcCos(float val)
-{
-}
+float ArcCos(float val);
 
 @Internal "asin($val)"
-float ArcSin(float val)
-{
-}
+float ArcSin(float val);
 
 @Internal "atan($val)"
-float ArcTan(float val)
-{
-}
+float ArcTan(float val);
