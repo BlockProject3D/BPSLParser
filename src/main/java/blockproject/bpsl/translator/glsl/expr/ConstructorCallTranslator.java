@@ -1,16 +1,17 @@
-package blockproject.bpsl.translator.glsl;
+package blockproject.bpsl.translator.glsl.expr;
 
 import blockproject.bpsl.Scope;
 import blockproject.bpsl.ast.Constructor;
 import blockproject.bpsl.ast.expr.ConstructorCall;
 import blockproject.bpsl.ast.expr.Expr;
 import blockproject.bpsl.ast.expr.Expr.EType;
+import blockproject.bpsl.translator.glsl.SignatureGenerator;
 
 public class ConstructorCallTranslator extends ExprTranslator {
 
     @Override
     public EType type() {
-        return (EType.UNARY_OPERATION);
+        return (EType.CONSTRUCTOR_CALL);
     }
 
     private String genParStringInternal(Scope scope, Constructor fc, ConstructorCall call)

@@ -1,4 +1,4 @@
-package blockproject.bpsl.translator.glsl;
+package blockproject.bpsl.translator.glsl.expr;
 
 import blockproject.bpsl.Scope;
 import blockproject.bpsl.ast.expr.BinaryExpr;

@@ -3,10 +3,20 @@ package blockproject.bpsl.translator;
 import java.util.Map;
 
 import blockproject.bpsl.Scope;
+import blockproject.bpsl.ast.Class;
 import blockproject.bpsl.ast.Function;
 import blockproject.bpsl.ast.Struct;
 import blockproject.bpsl.ast.TypeName;
 import blockproject.bpsl.ast.Struct.EQualifier;
+import blockproject.bpsl.ast.statement.Compound;
+import blockproject.bpsl.ast.statement.Expression;
+import blockproject.bpsl.ast.statement.For;
+import blockproject.bpsl.ast.statement.If;
+import blockproject.bpsl.ast.statement.Return;
+import blockproject.bpsl.ast.statement.Statement;
+import blockproject.bpsl.ast.statement.Variable;
+import blockproject.bpsl.ast.statement.While;
+import blockproject.bpsl.translator.glsl.expr.ExprTranslator;
 
 public class GLSLTranslator extends Translator {
 
@@ -54,74 +64,71 @@ public class GLSLTranslator extends Translator {
         System.out.println(res);
     }
 
-    /*private String convertExpr(Expr expr)
+    private String convertVarDec(Scope scope, Variable v)
     {
-        String res = "";
+        Object obj = scope.resolve(v.typeName.type);
+        String type = v.typeName.type;
 
-        switch (expr.type)
+        if (obj instanceof Struct)
         {
-        case BINARY_OPERATION:
-            
+            Struct st = (Struct)obj;
+            if (st.internalName != null)
+                type = st.internalName;
+        }
+        else if (obj instanceof Class)
+        {
+            Class st = (Class)obj;
+            if (st.internalName != null)
+                type = st.internalName;
+        }
+        if (v.typeName.arrSize > 0)
+            return (type + " " + v.typeName.name + "[" + v.typeName.arrSize + "];");
+        else
+        {
+            if (v.value != null)
+                return (type + " " + v.typeName.name + " = " + ExprTranslator.translateExpr(scope, v.value) + ";");
+            else
+            return (type + " " + v.typeName.name + ";");
+        }
+    }
+
+    private void convertStatement(Scope scope, Statement st, String init)
+    {
+        switch (st.type)
+        {
+        case IF:
+            System.out.println(init + "if (" + ExprTranslator.translateExpr(scope, ((If)st).condition) + ")");
+            convertStatement(scope, st, init + "\t");
             break;
-        case UNARY_OPERATION:
-            
+        case FOR:
+            System.out.println(init + "for (" + ExprTranslator.translateExpr(scope, ((For)st).init)
+                + "; " + ExprTranslator.translateExpr(scope, ((For)st).condition)
+                + "; " + ExprTranslator.translateExpr(scope, ((For)st).end) + ")");
+            convertStatement(scope, st, init + "\t");
             break;
-        case FUNCTION_CALL:
+        case WHILE:
+            System.out.println(init + "while (" + ExprTranslator.translateExpr(scope, ((While)st).condition) + ")");
+            convertStatement(scope, st, init + "\t");
             break;
-        case ARRAY_SUBSCRIPT:
-            
+        case COMPOUND:
+            System.out.println(init + "{");
+            for (Statement ss : ((Compound)st).statements)
+                convertStatement(scope, st, init + "\t");
+            System.out.println(init + "}");
             break;
-        case MEMBER_ACCESS:
-            
+        case VARIABLE_DECLARATION:
+            System.out.println(init + convertVarDec(scope, (Variable)st));
             break;
-        case MEMBER_FUNCTION_CALL:
-            
+        case EXPRESSION:
+            System.out.println(init + ExprTranslator.translateExpr(scope, ((Expression)st).expr) + ";");
             break;
-        case PRIMARY:
-            
-            break;
-        case INTEGER_LITTERAL:
-            
-            break;
-        case FLOAT_LITTERAL:
-            
-            break;
-        case DOUBLE_LITTERAL:
-            
-            break;
-        case IDENTIFIER:
-            
-            break;
-        case STRING_LITTERAL:
-            
+        case RETURN:
+            System.out.println(init + "return " + ExprTranslator.translateExpr(scope, ((Return)st).value) + ";");
             break;
         }
     }
 
-    private void convertStatement(Statement st, String init)
-    {
-        String res = init;
-
-        switch (st.type)
-        {
-        case IF:
-            break;
-        case FOR:
-            break;
-        case WHILE:
-            break;
-        case COMPOUND:
-            break;
-        case VARIABLE_DECLARATION:
-            break;
-        case EXPRESSION:
-            break;
-        case RETURN:
-            break;
-        }
-    }*/
-
-    private void convertFunction(Function fc)
+    private void convertFunction(Scope scope, Function fc)
     {
         String res = fc.typeName.type + " " + fc.typeName.name + "(";
 
@@ -135,10 +142,10 @@ public class GLSLTranslator extends Translator {
         }
         res += ")\n";
         res += "{\n";
-        //for (Statement st : fc.statements)
-        //    convertStatement(st, "\t");
-        res += "}\n";
         System.out.println(res);
+        for (Statement st : fc.statements)
+            convertStatement(scope, st, "\t");
+        System.out.println("}");
     }
     
     @Override
@@ -146,7 +153,7 @@ public class GLSLTranslator extends Translator {
         for (Map.Entry<String, Struct> entry : globalScope.structs.entrySet())
             convertStruct(entry.getValue());
         for (Map.Entry<String, Function> entry : globalScope.functions.entrySet())
-            convertFunction(entry.getValue());
+            convertFunction(globalScope, entry.getValue());
     }
 
     @Override

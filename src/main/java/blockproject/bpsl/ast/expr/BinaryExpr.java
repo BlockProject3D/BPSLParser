@@ -35,6 +35,6 @@ public class BinaryExpr extends Expr
 
     public BinaryExpr()
     {
-        super(Expr.EType.UNARY_OPERATION);
+        super(Expr.EType.BINARY_OPERATION);
     }
 }
