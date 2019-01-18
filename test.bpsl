@@ -41,5 +41,6 @@ int main()
 	Vec4 res = vv - v4;
 	v4.X = -res.Y;
 	v4.Y = Cos(v4.Y);
+	float vqs = v4.Length();
 	return (0);
 }

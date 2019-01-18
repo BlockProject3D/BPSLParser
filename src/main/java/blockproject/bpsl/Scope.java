@@ -105,7 +105,8 @@ public class Scope
 
     public static boolean isScalarType(String type)
     {
-        return (type.equals("float") || type.equals("double") || type.equals("int") || type.equals("uint"));
+        return (type.equals("float") || type.equals("double")
+            || type.equals("int") || type.equals("uint") || type.equals("void"));
     }
 
     public static boolean areParamsIdentical(List<TypeName> src, List<TypeName> search)

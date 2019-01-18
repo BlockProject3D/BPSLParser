@@ -23,6 +23,8 @@ class Vec4
 
     Vec4 operator-();
 
+    void operator=(Vec4 other);
+
     @Internal("normalize($this)")
     void Normalize();
 

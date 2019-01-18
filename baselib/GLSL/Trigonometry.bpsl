@@ -15,3 +15,6 @@ float ArcSin(float val);
 
 @Internal("atan($val)")
 float ArcTan(float val);
+
+@Internal("atan($val, $val1)")
+float ArcTan2(float val, float val1);
