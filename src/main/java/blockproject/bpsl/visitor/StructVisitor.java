@@ -16,7 +16,7 @@ public class StructVisitor extends BPSLBaseVisitor<Struct>
         if (ctx == null)
             return (null);
         if (ctx.name.getText().equals("Internal"))
-            return (ctx.value.getText());
+            return (ctx.value.getText().substring(1, ctx.value.getText().length() - 1));
         return (null);
     }
 

@@ -17,7 +17,7 @@ public class FunctionCallTranslator extends ExprTranslator {
     private String genParStringInternal(Scope scope, Function fc, FunctionCall call)
     {
         String str = SignatureGenerator.sign(fc) + "(";
-        String pars = fc.internalName.substring(fc.internalName.indexOf("("), fc.internalName.length() - 1);
+        String pars = fc.internalName.substring(fc.internalName.indexOf("(") + 1, fc.internalName.length() - 1);
 
         for (int i = 0 ; i < fc.parameters.size() ; ++i)
             pars = pars.replace("$" + fc.parameters.get(i).name, translateExpr(scope, call.parameters.get(i)));

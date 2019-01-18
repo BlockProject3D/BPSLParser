@@ -1,17 +1,17 @@
-@Internal "cos($val)"
+@Internal("cos($val)")
 float Cos(float val);
 
-@Internal "sin($val)"
+@Internal("sin($val)")
 float Sin(float val);
 
-@Internal "tan($val)"
+@Internal("tan($val)")
 float Tan(float val);
 
-@Internal "acos($val)"
+@Internal("acos($val)")
 float ArcCos(float val);
 
-@Internal "asin($val)"
+@Internal("asin($val)")
 float ArcSin(float val);
 
-@Internal "atan($val)"
+@Internal("atan($val)")
 float ArcTan(float val);

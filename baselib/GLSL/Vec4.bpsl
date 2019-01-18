@@ -1,16 +1,16 @@
-@Internal "vec4"
+@Internal("vec4")
 class Vec4
 {
-    @Internal "x"
+    @Internal("x")
     float X;
-    @Internal "y"
+    @Internal("y")
     float Y;
-    @Internal "z"
+    @Internal("z")
     float Z;
-    @Internal "w"
+    @Internal("w")
     float W;
 
-    @Internal "vec4($x, $y, $z, $w)"
+    @Internal("vec4($x, $y, $z, $w)")
     Vec4(float x, float y, float z, float w);
 
     Vec4 operator+(Vec4 other);
@@ -23,15 +23,15 @@ class Vec4
 
     Vec4 operator-();
 
-    @Internal "normalize($this)"
+    @Internal("normalize($this)")
     void Normalize();
 
-    @Internal "dot($this, $other)"
+    @Internal("dot($this, $other)")
     float Dot(Vec4 other);
 
-    @Internal "length($this)"
+    @Internal("length($this)")
     float Length();
 
-    @Internal "distance($this, $other)"
+    @Internal("distance($this, $other)")
     float Distance(Vec4 other);
 }

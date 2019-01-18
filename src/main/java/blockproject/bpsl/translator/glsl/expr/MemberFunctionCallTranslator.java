@@ -17,7 +17,7 @@ public class MemberFunctionCallTranslator extends ExprTranslator {
     private String genParStringInternal(Scope scope, Function fc, MemberFunctionCall call)
     {
         String str = SignatureGenerator.sign(call.typeName, fc) + "(";
-        String pars = fc.internalName.substring(fc.internalName.indexOf("("), fc.internalName.length() - 1);
+        String pars = fc.internalName.substring(fc.internalName.indexOf("(") + 1, fc.internalName.length() - 1);
 
         pars = pars.replace("$this", translateExpr(scope, call.data));
         for (int i = 0 ; i < fc.parameters.size() ; ++i)
