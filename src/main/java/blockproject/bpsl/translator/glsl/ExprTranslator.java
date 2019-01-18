@@ -3,6 +3,7 @@ package blockproject.bpsl.translator.glsl;
 import java.util.HashMap;
 import java.util.Map;
 
+import blockproject.bpsl.Scope;
 import blockproject.bpsl.ast.expr.Expr;
 
 public abstract class ExprTranslator
@@ -10,7 +11,7 @@ public abstract class ExprTranslator
     private static Map<Expr.EType, ExprTranslator> translators = new HashMap<>();
 
     public abstract Expr.EType type();
-    public abstract String translate(Expr expr);
+    public abstract String translate(Scope scope, Expr expr);
 
     public static void register(ExprTranslator t)
     {
@@ -24,18 +25,20 @@ public abstract class ExprTranslator
         return (null);
     }
 
-    public static String translateExpr(Expr expr)
+    public static String translateExpr(Scope scope, Expr expr)
     {
         ExprTranslator tr = getTranslator(expr.type);
         
         if (tr == null)
             return ("");
-        return (tr.translate(expr));
+        return (tr.translate(scope, expr));
     }
 
     static
     {
         register(new BinaryExprTranslator());
         register(new UnaryExprTranslator());
+        register(new FunctionCallTranslator());
+        register(new ConstructorCallTranslator());
     }
 }

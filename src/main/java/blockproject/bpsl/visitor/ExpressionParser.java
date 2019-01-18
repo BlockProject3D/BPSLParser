@@ -7,11 +7,13 @@ import blockproject.bpsl.BPSLLexer;
 import blockproject.bpsl.BPSLParser;
 import blockproject.bpsl.Scope;
 import blockproject.bpsl.ast.Class;
+import blockproject.bpsl.ast.Constructor;
 import blockproject.bpsl.ast.Function;
 import blockproject.bpsl.ast.Struct;
 import blockproject.bpsl.ast.TypeName;
 import blockproject.bpsl.ast.expr.ArraySubscript;
 import blockproject.bpsl.ast.expr.BinaryExpr;
+import blockproject.bpsl.ast.expr.ConstructorCall;
 import blockproject.bpsl.ast.expr.DoubleLitteral;
 import blockproject.bpsl.ast.expr.Expr;
 import blockproject.bpsl.ast.expr.FloatLitteral;
@@ -77,6 +79,8 @@ public class ExpressionParser
         if (f == null)
             Scope.Error(ctx, "Attempt to call undefined function '" + fc.data.typeName + "::" + fc.name + "'");
         fc.typeName = f.typeName.type;
+        fc.linkCrt = f;
+        fc.linkClass = cl;
         return (fc);
     }
 
@@ -93,7 +97,7 @@ public class ExpressionParser
         return (res);
     }
 
-    private static FunctionCall parseFunctionCall(BPSLParser.FunctionCallContext ctx, Scope scope)
+    private static Expr parseFunctionCall(BPSLParser.FunctionCallContext ctx, Scope scope)
     {
         FunctionCall fc = new FunctionCall();
 
@@ -106,9 +110,15 @@ public class ExpressionParser
         if (scope.resolve(fc.name) instanceof Class)
         {
             Class cl = (Class) scope.resolve(fc.name);
-            if (cl.fincConstructor(exprListToParamList(fc.parameters)) == null)
+            Constructor crt = cl.fincConstructor(exprListToParamList(fc.parameters));
+            if (crt == null)
                 Scope.Error(ctx, "Can't find matching constructor");
-            fc.typeName = cl.name;
+            ConstructorCall call = new ConstructorCall();
+            call.parameters = fc.parameters;
+            call.typeName = cl.name;
+            call.linkCrt = crt;
+            call.linkClass = cl;
+            return (call);
         }
         else
         {

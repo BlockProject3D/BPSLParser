@@ -1,23 +1,24 @@
 package blockproject.bpsl.translator.glsl;
 
 import blockproject.bpsl.Scope;
-import blockproject.bpsl.ast.Constructor;
-import blockproject.bpsl.ast.expr.ConstructorCall;
+import blockproject.bpsl.ast.Function;
 import blockproject.bpsl.ast.expr.Expr;
+import blockproject.bpsl.ast.expr.MemberFunctionCall;
 import blockproject.bpsl.ast.expr.Expr.EType;
 
-public class ConstructorCallTranslator extends ExprTranslator {
+public class MemberFunctionCallTranslator extends ExprTranslator {
 
     @Override
     public EType type() {
         return (EType.UNARY_OPERATION);
     }
 
-    private String genParStringInternal(Scope scope, Constructor fc, ConstructorCall call)
+    private String genParStringInternal(Scope scope, Function fc, MemberFunctionCall call)
     {
         String str = SignatureGenerator.sign(call.typeName, fc) + "(";
         String pars = fc.internalName.substring(fc.internalName.indexOf("("), fc.internalName.length() - 1);
 
+        pars = pars.replace("$this", translateExpr(scope, call.data));
         for (int i = 0 ; i < fc.parameters.size() ; ++i)
             pars = pars.replace("$" + fc.parameters.get(i).name, translateExpr(scope, call.parameters.get(i)));
         str += pars + ")";
@@ -26,11 +27,15 @@ public class ConstructorCallTranslator extends ExprTranslator {
 
     @Override
 	public String translate(Scope scope, Expr expr) {
-        ConstructorCall expr2 = (ConstructorCall) expr;
+        MemberFunctionCall expr2 = (MemberFunctionCall) expr;
         if (expr2.linkCrt.internalName != null)
             return (genParStringInternal(scope, expr2.linkCrt, expr2));
         String str = SignatureGenerator.sign(expr2.typeName, expr2.linkCrt) + "(";
 
+        if (expr2.parameters.size() > 0)
+            str += translateExpr(scope, expr2.data) + ", ";
+        else
+            str += translateExpr(scope, expr2.data);
         for (int i = 0 ; i < expr2.parameters.size() ; ++i)
         {
             String par = translateExpr(scope, expr2.parameters.get(i));

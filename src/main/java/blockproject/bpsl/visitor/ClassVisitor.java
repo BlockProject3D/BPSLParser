@@ -6,6 +6,7 @@ import blockproject.bpsl.BPSLBaseVisitor;
 import blockproject.bpsl.BPSLParser;
 import blockproject.bpsl.Scope;
 import blockproject.bpsl.ast.Class;
+import blockproject.bpsl.ast.Constructor;
 import blockproject.bpsl.ast.TypeName;
 import blockproject.bpsl.ast.statement.Variable;
 
@@ -40,6 +41,11 @@ public class ClassVisitor extends BPSLBaseVisitor<Class>
         v.typeName.name = "this";
         v.typeName.type = st.name;
         scope.variables.put("this", v);
+        for (int i = 0 ; i < ctx.constructor().size() ; ++i)
+        {
+            Constructor crt = FunctionVisitor.parseConstructor(ctx.constructor(i), scope);
+            st.constructors.add(crt);
+        }
         for (int i = 0 ; i < ctx.function().size() ; ++i)
         {
             st.members.add(FunctionVisitor.parseFunction(ctx.function(i), scope));

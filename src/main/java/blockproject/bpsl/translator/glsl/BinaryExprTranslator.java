@@ -1,5 +1,6 @@
 package blockproject.bpsl.translator.glsl;
 
+import blockproject.bpsl.Scope;
 import blockproject.bpsl.ast.expr.BinaryExpr;
 import blockproject.bpsl.ast.expr.Expr;
 import blockproject.bpsl.ast.expr.Expr.EType;
@@ -66,10 +67,10 @@ public class BinaryExprTranslator extends ExprTranslator {
     }
 
     @Override
-	public String translate(Expr expr) {
+	public String translate(Scope scope, Expr expr) {
         BinaryExpr expr2 = (BinaryExpr) expr;
-        String left = ExprTranslator.translateExpr(expr2.left);
-        String right = ExprTranslator.translateExpr(expr2.right);
+        String left = ExprTranslator.translateExpr(scope, expr2.left);
+        String right = ExprTranslator.translateExpr(scope, expr2.right);
         String op = translateOp(expr2.optype);
 
 		return (left + " " + op + " " + right);

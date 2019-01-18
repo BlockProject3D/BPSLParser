@@ -1,6 +1,7 @@
 package blockproject.bpsl.translator.glsl;
 
 import blockproject.bpsl.ast.expr.UnaryExpr;
+import blockproject.bpsl.Scope;
 import blockproject.bpsl.ast.expr.Expr;
 import blockproject.bpsl.ast.expr.Expr.EType;
 
@@ -28,9 +29,9 @@ public class UnaryExprTranslator extends ExprTranslator {
     }
 
     @Override
-	public String translate(Expr expr) {
+	public String translate(Scope scope, Expr expr) {
         UnaryExpr expr2 = (UnaryExpr) expr;
-        String left = ExprTranslator.translateExpr(expr2.left);
+        String left = ExprTranslator.translateExpr(scope, expr2.left);
         String op = translateOp(expr2.optype);
 
 		return (op + " " + left);

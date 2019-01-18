@@ -9,4 +9,5 @@ public class Constructor
 {
     public List<TypeName> parameters = new ArrayList<>();
     public List<Statement> statements = new ArrayList<>();
+    public String internalName;
 }
