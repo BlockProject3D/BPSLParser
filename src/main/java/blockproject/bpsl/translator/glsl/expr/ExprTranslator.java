@@ -40,5 +40,10 @@ public abstract class ExprTranslator
         register(new UnaryExprTranslator());
         register(new FunctionCallTranslator());
         register(new ConstructorCallTranslator());
+        register(new LiteralTranslator.Integer());
+        register(new LiteralTranslator.Float());
+        register(new LiteralTranslator.Double());
+        register(new LiteralTranslator.String());
+        register(new LiteralTranslator.IdentifierFucker());
     }
 }
