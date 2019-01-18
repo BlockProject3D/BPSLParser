@@ -55,10 +55,14 @@ public class GLSLTranslator extends Translator {
         res += "{\n";
         for (TypeName attr : st.attributes)
         {
+            String var = "\t" + attr.type + " ";
+            if (st.qualifier == EQualifier.CONSTBUF)
+                var += st.name + "_";
             if (attr.arrSize > 0)
-                res += "\t" + attr.type + " " + attr.name + "[" + attr.arrSize + "];\n";
+                var += attr.name + "[" + attr.arrSize + "];\n";
             else
-                res += "\t" + attr.type + " " + attr.name + ";\n";
+                var += attr.name + ";\n";
+            res += var;
         }
         res += "};\n";
         System.out.println(res);

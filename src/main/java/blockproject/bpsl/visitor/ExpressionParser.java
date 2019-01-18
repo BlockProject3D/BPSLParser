@@ -34,6 +34,8 @@ public class ExpressionParser
 
         sub.array = parseExpr(ctx.expr(0), scope);
         sub.index = parseExpr(ctx.expr(1), scope);
+        if (!sub.index.typeName.equals("int"))
+            Scope.Error(ctx, "Cannot array subscript with non-integer index");
         sub.typeName = sub.array.typeName;
         return (sub);
     }

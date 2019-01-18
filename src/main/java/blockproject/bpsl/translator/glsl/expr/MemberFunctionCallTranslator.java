@@ -40,7 +40,7 @@ public class MemberFunctionCallTranslator extends ExprTranslator {
         for (int i = 0 ; i < expr2.parameters.size() ; ++i)
         {
             String par = translateExpr(scope, expr2.parameters.get(i));
-            if (i != expr2.parameters.size())
+            if (i != expr2.parameters.size() - 1)
                 str += par + ", ";
             else
                 str += par;
