@@ -34,7 +34,7 @@ public class UnaryExprTranslator extends ExprTranslator {
         String left = ExprTranslator.translateExpr(scope, expr2.left);
         String op = translateOp(expr2.optype);
 
-		return (op + " " + left);
+		return (op + left);
 	}
 
 }

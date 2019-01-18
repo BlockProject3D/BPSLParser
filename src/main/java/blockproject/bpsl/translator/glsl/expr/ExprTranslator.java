@@ -47,5 +47,6 @@ public abstract class ExprTranslator
         register(new LiteralTranslator.IdentifierFucker());
         register(new MemberAccess());
         register(new ArraySubscriptTranslator());
+        register(new MemberFunctionCallTranslator());
     }
 }

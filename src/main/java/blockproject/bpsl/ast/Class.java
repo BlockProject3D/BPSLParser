@@ -40,7 +40,7 @@ public class Class
         null,
         null,
         null,
-        null
+        "operator="
     };
 
     private static final String[] OP_FUNC_NAMES_UN = new String[]

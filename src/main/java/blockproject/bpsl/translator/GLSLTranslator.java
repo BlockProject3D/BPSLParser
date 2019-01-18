@@ -134,6 +134,8 @@ public class GLSLTranslator extends Translator {
 
     private void convertFunction(Scope scope, Function fc)
     {
+        if (fc.internalName != null)
+            return;
         String res = fc.typeName.type + " " + fc.typeName.name + "(";
 
         for (int i = 0 ; i < fc.parameters.size() ; ++i)

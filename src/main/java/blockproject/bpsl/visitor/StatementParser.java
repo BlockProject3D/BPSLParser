@@ -72,7 +72,11 @@ public class StatementParser
     {
         Return ret = new Return();
 
+        if (scope.curFunction == null)
+            Scope.Error(ctx, "Return statement outside function");
         ret.value = ExpressionParser.parseExpr(ctx.expr(), scope);
+        if (!ret.value.typeName.equals(scope.curFunction.typeName.type))
+            Scope.Warning(ctx, "Conversion from '" + ret.value.typeName + "'" + " to '" + scope.curFunction.typeName.type + "'");
         return (ret);
     }
 

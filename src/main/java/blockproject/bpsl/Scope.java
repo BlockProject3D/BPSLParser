@@ -75,7 +75,7 @@ public class Scope
             {
                 if (par.name.equals(name))
                     return (par);
-            }    
+            }
         }
         return (null);
     }
@@ -92,6 +92,14 @@ public class Scope
             return (functions.get(name).typeName.type);
         if (variables.containsKey(name))
             return (variables.get(name).typeName.type);
+        if (curFunction != null)
+        {
+            for (TypeName par : curFunction.parameters)
+            {
+                if (par.name.equals(name))
+                    return (par.type);
+            }
+        }
         return (null);
     }
 
@@ -107,7 +115,7 @@ public class Scope
         for (int i = 0 ; i < src.size() ; ++i)
         {
             TypeName s = src.get(i);
-            TypeName s1 = search.get(1);
+            TypeName s1 = search.get(i);
             if (!s.type.equals(s1.type))
                 return (false);
         }

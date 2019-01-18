@@ -244,7 +244,7 @@ public class ExpressionParser
         Object obj = scope.resolve(expr.left.typeName);
         if (!Scope.isScalarType(expr.left.typeName) && (obj == null || !(obj instanceof Class)))
             Scope.Error(ctx, "Attempt to perform binary operation on non-type '" + expr.left.typeName + "'");
-        if (expr.left.typeName != expr.right.typeName)
+        if (!expr.left.typeName.equals(expr.right.typeName))
             Scope.Warning(ctx, "Conversion from '" + expr.right.typeName + "' to '" + expr.left.typeName + "'");
         if (obj instanceof Class)
         {
@@ -263,6 +263,8 @@ public class ExpressionParser
                 fcm.data = expr.left;
                 fcm.name = fc.typeName.name;
                 fcm.parameters.add(expr.right);
+                fcm.linkClass = cl;
+                fcm.linkCrt = fc;
                 return (fcm);
             }
         }
@@ -305,6 +307,8 @@ public class ExpressionParser
                 fcm.typeName = fc.typeName.type;
                 fcm.data = expr.left;
                 fcm.name = fc.typeName.name;
+                fcm.linkClass = cl;
+                fcm.linkCrt = fc;
                 return (fcm);    
             }
         }    

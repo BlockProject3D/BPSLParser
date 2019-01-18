@@ -31,7 +31,7 @@ public class MemberFunctionCallTranslator extends ExprTranslator {
         MemberFunctionCall expr2 = (MemberFunctionCall) expr;
         if (expr2.linkCrt.internalName != null)
             return (genParStringInternal(scope, expr2.linkCrt, expr2));
-        String str = SignatureGenerator.sign(expr2.typeName, expr2.linkCrt) + "(";
+        String str = SignatureGenerator.sign(expr2.linkClass.name, expr2.linkCrt) + "(";
 
         if (expr2.parameters.size() > 0)
             str += translateExpr(scope, expr2.data) + ", ";
