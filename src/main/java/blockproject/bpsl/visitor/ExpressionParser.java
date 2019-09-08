@@ -36,6 +36,20 @@ public class ExpressionParser
         sub.index = parseExpr(ctx.expr(1), scope);
         if (!sub.index.typeName.equals("int"))
             Scope.Error(ctx, "Cannot array subscript with non-integer index");
+        if (scope.resolve(sub.array.typeName) != null && (scope.resolve(sub.array.typeName) instanceof Class))
+        {
+            System.out.println(scope.resolve(sub.array.typeName));
+            TypeName t = new TypeName();
+            t.type = "int";
+            List<TypeName> lst = new ArrayList<>();
+            lst.add(t);
+            Class cl = (Class)scope.resolve(sub.array.typeName);
+            Function f = cl.findFunctionByName("operator[]", lst);
+            if (f == null)
+                Scope.Error(ctx, "Attempt to subscript on undefined type '" + sub.array.typeName + "'");
+            sub.typeName = f.typeName.type;
+            return (sub);
+        }
         sub.typeName = sub.array.typeName;
         return (sub);
     }

@@ -21,8 +21,10 @@ class Vec2
 
     void operator=(Vec2 other);
 
+    float operator[](int id);
+
     @Internal("normalize($this)")
-    void Normalize();
+    Vec2 Normalize();
 
     @Internal("dot($this, $other)")
     float Dot(Vec2 other);

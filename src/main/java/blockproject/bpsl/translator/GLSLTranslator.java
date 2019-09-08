@@ -117,7 +117,7 @@ public class GLSLTranslator extends Translator {
         case COMPOUND:
             System.out.println(init + "{");
             for (Statement ss : ((Compound)st).statements)
-                convertStatement(scope, st, init + "\t");
+                convertStatement(scope, ss, init + "\t");
             System.out.println(init + "}");
             break;
         case VARIABLE_DECLARATION:

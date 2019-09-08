@@ -23,8 +23,10 @@ class Vec3
 
     void operator=(Vec3 other);
 
+    float operator[](int id);
+
     @Internal("normalize($this)")
-    void Normalize();
+    Vec3 Normalize();
 
     @Internal("dot($this, $other)")
     float Dot(Vec3 other);
